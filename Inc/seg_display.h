@@ -14,6 +14,6 @@ typedef struct {
 } display_handle_t;
 
 void display_init(display_handle_t *hdisp);
-void display_set(display_handle_t *hdisp, uint8_t *data);
+void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size);
 
 #endif  // !__SEG_DISPLAY_H__

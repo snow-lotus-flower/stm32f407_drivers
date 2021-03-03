@@ -44,11 +44,15 @@ void display_init(display_handle_t *hdisp)
  * @param hdisp 数码管设备 handle
  * @param data uint_8 字符串. 最多显示前 8 个字符. 对于 data[i], 若 0 <= data[i]
  * <= 9 或 '0' <= data[i] <= '9', 则输出该数字代表的字型; 否则输出 '-' 字型.
+ * @param size uint_16 字符串
  */
-void display_set(display_handle_t *hdisp, uint8_t *data)
+void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size)
 {
   uint8_t num;
-  for (int i = 0; i < 8 && data[i]; ++i) {
+
+  if (size > 8) size = 8;
+
+  for (int i = 0; i < size; ++i) {
     if (data[i] >= 0 && data[i] <= 9) {
       num = data[i];
     } else if (isdigit(data[i])) {
@@ -56,6 +60,9 @@ void display_set(display_handle_t *hdisp, uint8_t *data)
     } else {
       num = 0x0A;  // '-'
     }
-    display_transmit(hdisp->hspi, DIGIT_REG(i), num);
+    display_transmit(hdisp, DIGIT_REG(i), num);
   }
+
+  // 熄灭没有设置的位
+  for (int i = size; i < 8; ++i) display_transmit(hdisp, DIGIT_REG(i), 0x0F);
 }
