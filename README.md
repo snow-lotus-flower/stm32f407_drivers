@@ -8,7 +8,7 @@ PWM 驱动板芯片 PCA9685 的驱动
 
 ## pwm_driver.h & pwm_driver.c
 
-PWM 相关函数封装
+PWM 相关函数封装. I2C 使用默认配置即可.
 
 ### Example
 
@@ -20,7 +20,7 @@ pca9685_handle_t hpca = {.i2c_handle = &hi2c1,
                            .inverted = false};
 ```
 
-其中 `defice_address` 保留默认, `i2c_handle` 设置为 SPI 接口的 handle.
+其中 `defice_address` 保留默认, `i2c_handle` 设置为 I2C 接口的 handle.
 
 然后创建 PWM 通道的 handle:
 
