@@ -27,15 +27,15 @@ void display_transmit(display_handle_t *hdisp, uint8_t address, uint8_t value)
 void display_init(display_handle_t *hdisp)
 {
   // 关闭测试模式
-  display_transmit(hdisp->hspi, DISPLAYTEST_REG, 0);
+  display_transmit(hdisp, DISPLAYTEST_REG, 0);
   // 关闭待机模式
-  display_transmit(hdisp->hspi, SHUTDOWN_REG, 1);
+  display_transmit(hdisp, SHUTDOWN_REG, 1);
   // 设置亮度
-  display_transmit(hdisp->hspi, INTENSITY_REG, 0x0);
+  display_transmit(hdisp, INTENSITY_REG, 0x0);
   // 设置显示的数码管位数
-  display_transmit(hdisp->hspi, SCANLIMIT_REG, 7);
+  display_transmit(hdisp, SCANLIMIT_REG, 7);
   // 打开 BCD 解码模式
-  display_transmit(hdisp->hspi, DECODE_REG, 1);
+  display_transmit(hdisp, DECODE_REG, 1);
 }
 
 /**
