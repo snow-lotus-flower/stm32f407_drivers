@@ -1,7 +1,7 @@
 #ifndef __SEG_DISPLAY_H__
 #define __SEG_DISPLAY_H__
 
-#include "spi.h"
+#include "stm32f4xx_hal.h"
 
 /**
  * @brief 数码管设备 handle.
