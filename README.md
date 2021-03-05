@@ -71,3 +71,54 @@ uint8_t data2[] = {1, 2, 3, 10, 3, 2, 1};
 display_set(hdisp, data1, 7);
 display_set(hdisp, data2, 7);
 ```
+
+## gyroscope.h / gyroscope.c
+
+获取陀螺仪的角度和角速度数据. 通过全双工 UART 通信, 需要开启 DMA Rx 和 UART 全局中断.
+
+## Example
+
+先创建陀螺仪的 handle:
+
+```c
+uint8_t gyro_buffer[30];
+gyro_handle_t hgyro = {
+    .huart = &huart1, .buffer = gyro_buffer, .buffer_size = 30};
+```
+
+其中 `gyro_buffer` 是 UART DMA Rx 的缓冲区, 大小至少为 23, 推荐设为 30;
+
+若要将陀螺仪的角度归零, 运行
+
+```c
+gyro_set_zero(&hgyro);
+```
+
+若要接收陀螺仪回传的数据, 首先改写 UARTx 的全局回调函数:
+
+```c
+/* In file stm32f4xx_it.c */
+
+void USART1_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART1_IRQn 0 */
+  if (gyro_IRQHandler(&hgyro)) {
+    HAL_GPIO_TogglePin(LED_3_GPIO_Port, LED_3_Pin);
+  }
+  /* USER CODE END USART1_IRQn 0 */
+  HAL_UART_IRQHandler(&huart1);
+  /* USER CODE BEGIN USART1_IRQn 1 */
+
+  /* USER CODE END USART1_IRQn 1 */
+}
+```
+
+当 `gyro_IRQ_Handler` 成功解析数据时, 将返回 `true`, 否则返回 `false`.
+
+然后在合适的位置调用
+
+```c
+gyro_start(&hgyro);
+```
+
+即可. gyro_IRQ_Handler 会把解析得到的数据存储在 `hgyro.degree` 和 `hgyro.omega` 中, 分别代表角度和角速度. 陀螺仪返回的原始信息存储在 `hgyro.degree_raw` 和 `hgyro.omega_raw` 中.
