@@ -9,9 +9,11 @@
 #define SHUTDOWN_REG (0x0C)
 #define DISPLAYTEST_REG (0x0F)
 
-void display_transmit(display_handle_t *hdisp, uint8_t address, uint8_t value);
+static void display_transmit(display_handle_t *hdisp, uint8_t address,
+                             uint8_t value);
 
-void display_transmit(display_handle_t *hdisp, uint8_t address, uint8_t value)
+static void display_transmit(display_handle_t *hdisp, uint8_t address,
+                             uint8_t value)
 {
   HAL_GPIO_WritePin(hdisp->cs_port, hdisp->cs_pin, GPIO_PIN_RESET);
   HAL_SPI_Transmit(hdisp->hspi, &address, 1, 5);
