@@ -21,5 +21,5 @@ typedef struct {
 
 bool gyro_start(gyro_handle_t *hgyro);
 bool gyro_IRQHandler(gyro_handle_t *hgyro);
-bool gyro_set_zero(gyro_handle_t *hgyro)
+bool gyro_set_zero(gyro_handle_t *hgyro);
 #endif  // !__GYROSCOPE_H__
