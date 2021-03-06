@@ -11,10 +11,10 @@
  */
 typedef struct {
   UART_HandleTypeDef *huart;
-  int16_t degree_raw;
-  float degree;
-  int16_t omega_raw;
-  float omega;
+  __IO int16_t degree_raw;
+  __IO float degree;
+  __IO int16_t omega_raw;
+  __IO float omega;
   uint8_t *buffer;      /** The size should be at least GYRO_BUFFER_SIZE */
   uint16_t buffer_size; /** The size should be at least GYRO_BUFFER_SIZE */
 } gyro_handle_t;
