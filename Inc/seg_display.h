@@ -3,6 +3,9 @@
 
 #include "stm32f4xx_hal.h"
 
+#define DISP_SYMBOL_MINUS (0x0A)
+#define DISP_SYMBOL_NULL (0x0F)
+
 /**
  * @brief 数码管设备 handle.
  *

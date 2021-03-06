@@ -54,17 +54,18 @@ void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size)
 
   if (size > 8) size = 8;
 
-  for (int i = 0; i < size; ++i) {
-    if (data[i] >= 0 && data[i] <= 9) {
+  for (int i = 0; i < 8; ++i) {
+    if (i >= size) {
+      num = 0x0F;
+    } else if (data[i] >= 0 && data[i] <= 9) {
       num = data[i];
     } else if (isdigit(data[i])) {
       num = data[i] - '0';
-    } else {
+    } else if (data[i] == DISP_SYMBOL_MINUS) {
       num = 0x0A;  // '-'
+    } else {
+      num = 0x0F;
     }
     display_transmit(hdisp, DIGIT_REG(i), num);
   }
-
-  // 熄灭没有设置的位
-  for (int i = size; i < 8; ++i) display_transmit(hdisp, DIGIT_REG(i), 0x0F);
 }
