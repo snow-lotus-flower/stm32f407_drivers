@@ -9,7 +9,7 @@
  */
 bool pwm_init(pca9685_handle_t *hpca)
 {
-  if (pca9685_init(hpca) && pca9685_set_pwm_frequency(hpca, 50.0))
+  if (pca9685_init(hpca))
     return true;
   else
     return false;

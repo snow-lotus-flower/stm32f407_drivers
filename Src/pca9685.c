@@ -118,7 +118,7 @@ bool pca9685_init(pca9685_handle_t *handle)
   uint8_t data[4] = {0x00, 0x00, 0x00, 0x10};
   success &= pca9685_write_data(handle, PCA9685_REGISTER_ALL_LED_ON_L, data, 4);
 
-  success &= pca9685_set_pwm_frequency(handle, 1000);
+  success &= pca9685_set_pwm_frequency(handle, 50);
   success &= pca9685_wakeup(handle);
 
   return success;
