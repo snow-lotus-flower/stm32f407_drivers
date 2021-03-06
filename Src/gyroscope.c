@@ -55,9 +55,6 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
  */
 bool gyro_start(gyro_handle_t *hgyro)
 {
-  if (hgyro->buffer_size < GYRO_BUFFER_SIZE) {
-    return false;
-  }
   __HAL_UART_ENABLE_IT(hgyro->huart, UART_IT_IDLE);
   HAL_UART_Receive_DMA(hgyro->huart, hgyro->buffer, GYRO_BUFFER_SIZE);
   return true;
@@ -77,7 +74,7 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
     __HAL_UART_CLEAR_IDLEFLAG(hgyro->huart);
     HAL_UART_DMAStopRx(hgyro->huart);
     uint16_t count = __HAL_DMA_GET_COUNTER(hgyro->huart->hdmarx);
-    if (hgyro->buffer_size - count >= 22) {
+    if (GYRO_BUFFER_SIZE - count >= 22) {
       uint8_t checksum_omega = 0, checksum_yaw = 0;
       for (int i = 0; i < 10; ++i) {
         checksum_omega += hgyro->buffer[i];
