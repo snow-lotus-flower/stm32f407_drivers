@@ -12,6 +12,13 @@
 static void display_transmit(display_handle_t *hdisp, uint8_t address,
                              uint8_t value);
 
+/**
+ * @brief 向 MAX7219 发送一条指令
+ *
+ * @param hdisp 数码管 handle
+ * @param address 寄存器地址
+ * @param value 寄存器值
+ */
 static void display_transmit(display_handle_t *hdisp, uint8_t address,
                              uint8_t value)
 {
@@ -66,6 +73,6 @@ void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size)
     } else {
       num = 0x0F;
     }
-    display_transmit(hdisp, DIGIT_REG(i), num);
+    display_transmit(hdisp, DIGIT_REG(7 - i), num);
   }
 }
