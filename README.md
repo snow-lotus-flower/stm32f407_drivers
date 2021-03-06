@@ -81,12 +81,8 @@ display_set(hdisp, data2, 7);
 先创建陀螺仪的 handle:
 
 ```c
-uint8_t gyro_buffer[30];
-gyro_handle_t hgyro = {
-    .huart = &huart1, .buffer = gyro_buffer, .buffer_size = 30};
+gyro_handle_t hgyro = {.huart = &huart1};
 ```
-
-其中 `gyro_buffer` 是 UART DMA Rx 的缓冲区, 大小至少为 23, 推荐设为 30;
 
 若要将陀螺仪的角度归零, 运行
 
