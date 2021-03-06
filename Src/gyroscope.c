@@ -27,7 +27,20 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
     if (huart->hdmarx != NULL) {
       HAL_DMA_Abort(huart->hdmarx);
     }
-    UART_EndRxTransfer(huart);
+    /* Disable RXNE, PE and ERR (Frame error, noise error, overrun error)
+     * interrupts */
+    CLEAR_BIT(huart->Instance->CR1, (USART_CR1_RXNEIE | USART_CR1_PEIE));
+    CLEAR_BIT(huart->Instance->CR3, USART_CR3_EIE);
+
+    /* In case of reception waiting for IDLE event, disable also the IDLE IE
+     * interrupt source */
+    if (huart->ReceptionType == HAL_UART_RECEPTION_TOIDLE) {
+      CLEAR_BIT(huart->Instance->CR1, USART_CR1_IDLEIE);
+    }
+
+    /* At end of Rx process, restore huart->RxState to Ready */
+    huart->RxState = HAL_UART_STATE_READY;
+    huart->ReceptionType = HAL_UART_RECEPTION_STANDARD;
   }
 
   return HAL_OK;
