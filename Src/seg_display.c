@@ -37,7 +37,7 @@ void display_init(display_handle_t *hdisp)
   // 设置显示的数码管位数
   display_transmit(hdisp, SCANLIMIT_REG, 7);
   // 打开 BCD 解码模式
-  display_transmit(hdisp, DECODE_REG, 1);
+  display_transmit(hdisp, DECODE_REG, 0xFF);
 }
 
 /**
