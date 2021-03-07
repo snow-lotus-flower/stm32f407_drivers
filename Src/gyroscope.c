@@ -56,6 +56,7 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
 bool gyro_start(gyro_handle_t *hgyro)
 {
   __HAL_UART_ENABLE_IT(hgyro->huart, UART_IT_IDLE);
+  hgyro->new_data = false;
   HAL_UART_Receive_DMA(hgyro->huart, hgyro->buffer, GYRO_BUFFER_SIZE);
   return true;
 }
@@ -75,6 +76,7 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
     HAL_UART_DMAStopRx(hgyro->huart);
     uint16_t count = __HAL_DMA_GET_COUNTER(hgyro->huart->hdmarx);
     if (GYRO_BUFFER_SIZE - count >= 22) {
+      // 计算并检验校验码
       uint8_t checksum_omega = 0, checksum_yaw = 0;
       for (int i = 0; i < 10; ++i) {
         checksum_omega += hgyro->buffer[i];
@@ -89,10 +91,12 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
         uint8_t yawH = hgyro->buffer[18], yawL = hgyro->buffer[17];
         hgyro->degree_raw = (int16_t)(((uint16_t)yawH << 8) | yawL);
         hgyro->degree = hgyro->degree_raw * 180.0 / 2e15;
+        hgyro->new_data = true;
         success = true;
       }
     }
-    gyro_start(hgyro);
+
+    HAL_UART_Receive_DMA(hgyro->huart, hgyro->buffer, GYRO_BUFFER_SIZE);
   }
 
   return success;

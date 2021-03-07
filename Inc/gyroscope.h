@@ -16,6 +16,7 @@ typedef struct {
   __IO int16_t omega_raw;
   __IO float omega;
   uint8_t buffer[GYRO_BUFFER_SIZE];
+  bool new_data;
 } gyro_handle_t;
 
 bool gyro_start(gyro_handle_t *hgyro);
