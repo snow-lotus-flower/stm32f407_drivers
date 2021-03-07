@@ -118,3 +118,45 @@ gyro_start(&hgyro);
 ```
 
 即可. gyro_IRQ_Handler 会把解析得到的数据存储在 `hgyro.degree` 和 `hgyro.omega` 中, 分别代表角度和角速度. 陀螺仪返回的原始信息存储在 `hgyro.degree_raw` 和 `hgyro.omega_raw` 中.
+
+## code_scanner.h / code_scanner.c
+
+二维码模块驱动. UART 需开启 DMA Rx/Tx 并开启全局中断.
+
+### Example
+
+首先创建二维码模块 handle
+
+```c
+scanner_handle_t hscan = {.huart = &huart2};
+```
+
+在相应的 `UARTx_IRQHandler` 中插入中断处理函数
+
+```c
+// In file stm32f4xx_it.c
+
+void USART2_IRQHandler(void)
+{
+  /* USER CODE BEGIN USART2_IRQn 0 */
+  if (scanner_IRQHandler(&hscan)) {
+    HAL_GPIO_TogglePin(LED_3_GPIO_Port, LED_3_Pin);
+  }
+  /* USER CODE END USART2_IRQn 0 */
+  HAL_UART_IRQHandler(&huart2);
+  /* USER CODE BEGIN USART2_IRQn 1 */
+
+  /* USER CODE END USART2_IRQn 1 */
+}
+```
+
+当扫描成功时, `scanner_IRQHandler` 返回 `true`, 将 `hscan.new_data` 设置为 `true`, 且将扫描到的数据存储在 `hscan.result` 中.
+
+一次典型的扫描过程如下:
+
+```c
+scanner_start(&hscan); // 启动一次扫描
+while (!hscan.new_data) osDelay(100); // 等待扫描成功
+HAL_UART_Transmit(&huart3, hscan.result, 8); // 回传扫描数据
+hscan.new_data = false; // 清除标志位
+```
