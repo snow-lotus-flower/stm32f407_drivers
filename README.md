@@ -25,7 +25,6 @@ pca9685_handle_t hpca = {.i2c_handle = &hi2c1,
 ```c
 pwm_handle_t servo = {.hpca = &hpca, .channel = 0};
 pwm_handle_t motor = {.hpca = &hpca, .channel = 1};
-...
 ```
 
 初始化 PWM 驱动板, PWM 频率为 50.0 Hz:
@@ -121,7 +120,8 @@ gyro_start(&hgyro);
 
 ## code_scanner.h / code_scanner.c
 
-二维码模块驱动. UART 需开启 DMA Rx/Tx 并开启全局中断.
+GM65 二维码模块驱动. UART 需开启 DMA Rx/Tx 并开启全局中断.
+GM65 模块应设置为命令触发模式, 单次读码时长无限长, 结束符 CR.
 
 ### Example
 
