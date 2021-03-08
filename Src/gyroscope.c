@@ -87,10 +87,10 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
           hgyro->buffer[12] == 0x53 && hgyro->buffer[21] == checksum_yaw) {
         uint8_t wzH = hgyro->buffer[7], wzL = hgyro->buffer[6];
         hgyro->omega_raw = (int16_t)(((uint16_t)wzH << 8) | wzL);
-        hgyro->omega = hgyro->degree_raw * 2000.0 / 2e15;
+        hgyro->omega = hgyro->degree_raw * 2000.0 / (2 << 14);
         uint8_t yawH = hgyro->buffer[18], yawL = hgyro->buffer[17];
         hgyro->degree_raw = (int16_t)(((uint16_t)yawH << 8) | yawL);
-        hgyro->degree = hgyro->degree_raw * 180.0 / 2e15;
+        hgyro->degree = hgyro->degree_raw * 180.0 / (2 << 14);
         hgyro->new_data = true;
         success = true;
       }
