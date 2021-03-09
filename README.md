@@ -73,7 +73,7 @@ display_set(hdisp, data2, 7);
 
 ## gyroscope.h / gyroscope.c
 
-获取陀螺仪的角度和角速度数据. 通过全双工 UART 通信, 需要开启 DMA Rx 和 UART 全局中断.
+获取陀螺仪的角度和角速度数据. 通过全双工 UART 通信, 需要开启 DMA Rx/Tx 和 UART 全局中断.
 
 ## Example
 
