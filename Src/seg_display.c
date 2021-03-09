@@ -22,9 +22,10 @@ static void display_transmit(display_handle_t *hdisp, uint8_t address,
 static void display_transmit(display_handle_t *hdisp, uint8_t address,
                              uint8_t value)
 {
+  uint8_t command[2] = {value, address};
   HAL_GPIO_WritePin(hdisp->cs_port, hdisp->cs_pin, GPIO_PIN_RESET);
-  HAL_SPI_Transmit(hdisp->hspi, &address, 1, 5);
-  HAL_SPI_Transmit(hdisp->hspi, &value, 1, 5);
+  HAL_SPI_Transmit_DMA(hdisp->hspi, command, 1);
+  while (HAL_SPI_GetState(hdisp->hspi) != HAL_SPI_STATE_READY) osDelay(1);
   HAL_GPIO_WritePin(hdisp->cs_port, hdisp->cs_pin, GPIO_PIN_SET);
 }
 
@@ -68,7 +69,7 @@ void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size)
       num = data[i];
     } else if (isdigit(data[i])) {
       num = data[i] - '0';
-    } else if (data[i] == DISP_SYMBOL_MINUS) {
+    } else if (data[i] == DISP_SYMBOL_MINUS || data[i] == '-') {
       num = 0x0A;  // '-'
     } else {
       num = 0x0F;

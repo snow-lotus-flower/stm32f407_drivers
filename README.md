@@ -46,7 +46,7 @@ pwm_init(&hpca);
 
 ## seg_display.h / seg_display.c
 
-通过 MAX7219 芯片驱动八位七段数码管显示数字. SPI 使用默认设置即可. 需单独设置一个 GPIO_Output 引脚作为片选端 (CS).
+通过 MAX7219 芯片驱动八位七段数码管显示数字. SPI 需开启发送 DMA, 设置数据长度 `16 Bits`. 需单独设置一个 GPIO_Output 引脚作为片选端 (CS).
 
 ### Example
 

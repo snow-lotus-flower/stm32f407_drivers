@@ -1,6 +1,7 @@
 #ifndef __SEG_DISPLAY_H__
 #define __SEG_DISPLAY_H__
 
+#include "cmsis_os.h"
 #include "stm32f4xx_hal.h"
 
 #define DISP_SYMBOL_MINUS (0x0A)
