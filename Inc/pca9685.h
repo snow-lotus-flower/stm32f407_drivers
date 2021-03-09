@@ -24,6 +24,7 @@
 #error Platform not implemented
 #endif
 
+#include <cmsis_os.h>
 #include <stdbool.h>
 
 #ifndef PCA9685_I2C_TIMEOUT
