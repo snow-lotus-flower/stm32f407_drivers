@@ -111,8 +111,9 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
  */
 bool gyro_set_zero(gyro_handle_t *hgyro)
 {
-  static uint8_t command[] = {0xFF, 0xAA, 0x76, 0x00, 0x00};
-  if (HAL_UART_Transmit_IT(hgyro->huart, command, 5) == HAL_OK)
+  static uint8_t command[] = {0xFF, 0xAA, 0x69, 0x88, 0xB5,
+                              0xFF, 0xAA, 0x76, 0x00, 0x00};
+  if (HAL_UART_Transmit_DMA(hgyro->huart, command, 10) == HAL_OK)
     return true;
   else
     return false;
