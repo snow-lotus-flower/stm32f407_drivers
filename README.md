@@ -160,3 +160,7 @@ while (!hscan.new_data) osDelay(100); // 等待扫描成功
 HAL_UART_Transmit(&huart3, hscan.result, 8); // 回传扫描数据
 hscan.new_data = false; // 清除标志位
 ```
+
+## motor.h / motor.c
+
+电机驱动. 对于每个电机, 需要开启两个 GPIO 输出方向信号, 一个 PWM 通道输出使能信号.
