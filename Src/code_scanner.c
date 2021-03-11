@@ -58,7 +58,7 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
  * @return true 成功
  * @return false 失败
  */
-bool scanner_start(scanner_handle_t *hscan)
+bool scanner_start(Scanner_HandleTypeDef *hscan)
 {
   bool success = true;
   hscan->new_data = false;
@@ -78,7 +78,7 @@ bool scanner_start(scanner_handle_t *hscan)
  * @return true 读取到信息
  * @return false 未读取到信息
  */
-bool scanner_IRQHandler(scanner_handle_t *hscan)
+bool scanner_IRQHandler(Scanner_HandleTypeDef *hscan)
 {
   bool success = false;
   if (__HAL_UART_GET_FLAG(hscan->huart, UART_FLAG_IDLE)) {

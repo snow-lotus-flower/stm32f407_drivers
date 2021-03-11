@@ -1,6 +1,6 @@
 #include "motor.h"
 
-static void motor_set_direction(motor_handle_t *hmtr, MotorDirection dir)
+static void motor_set_direction(Motor_HandleTypeDef *hmtr, MotorDirection dir)
 {
   GPIO_PinState dir1_state;
   GPIO_PinState dir2_state;
@@ -32,7 +32,7 @@ static void motor_set_direction(motor_handle_t *hmtr, MotorDirection dir)
  *
  * @param hmtr 电机 handle
  */
-void motor_speed_update(motor_handle_t *hmtr)
+void motor_speed_update(Motor_HandleTypeDef *hmtr)
 {
   if (hmtr->brake) {
     motor_set_direction(hmtr, MOTOR_BRAKE);

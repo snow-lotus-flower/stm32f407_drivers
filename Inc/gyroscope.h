@@ -17,9 +17,9 @@ typedef struct {
   __IO float omega;
   uint8_t buffer[GYRO_BUFFER_SIZE];
   bool new_data;
-} gyro_handle_t;
+} Gyro_HandleTypeDef;
 
-bool gyro_start(gyro_handle_t *hgyro);
-bool gyro_IRQHandler(gyro_handle_t *hgyro);
-bool gyro_set_zero(gyro_handle_t *hgyro);
+bool gyro_start(Gyro_HandleTypeDef *hgyro);
+bool gyro_IRQHandler(Gyro_HandleTypeDef *hgyro);
+bool gyro_set_zero(Gyro_HandleTypeDef *hgyro);
 #endif  // !__GYROSCOPE_H__

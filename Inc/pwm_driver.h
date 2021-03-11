@@ -6,12 +6,12 @@
 #define PWM_MAX_OFF_TIME 4096
 
 typedef struct {
-  pca9685_handle_t *hpca;
+  PCA9685_HandleTypeDef *hpca;
   uint8_t channel;
-} pwm_handle_t;
+} PWM_HandleTypeDef;
 
-bool pwm_init(pca9685_handle_t *hpca);
-bool pwm_set_duty_cycle(pwm_handle_t *hpwm, float duty_cycle);
-bool pwm_set_off_time(pwm_handle_t *hpwm, uint8_t off_time);
+bool pwm_init(PCA9685_HandleTypeDef *hpca);
+bool pwm_set_duty_cycle(PWM_HandleTypeDef *hpwm, float duty_cycle);
+bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint8_t off_time);
 
 #endif  // !__PWM_DRIVER_H__

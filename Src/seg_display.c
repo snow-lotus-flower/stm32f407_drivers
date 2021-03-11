@@ -9,7 +9,7 @@
 #define SHUTDOWN_REG (0x0C)
 #define DISPLAYTEST_REG (0x0F)
 
-static void display_transmit(display_handle_t *hdisp, uint8_t address,
+static void display_transmit(Display_HandleTypeDef *hdisp, uint8_t address,
                              uint8_t value);
 
 /**
@@ -19,7 +19,7 @@ static void display_transmit(display_handle_t *hdisp, uint8_t address,
  * @param address 寄存器地址
  * @param value 寄存器值
  */
-static void display_transmit(display_handle_t *hdisp, uint8_t address,
+static void display_transmit(Display_HandleTypeDef *hdisp, uint8_t address,
                              uint8_t value)
 {
   uint8_t command[2] = {value, address};
@@ -34,7 +34,7 @@ static void display_transmit(display_handle_t *hdisp, uint8_t address,
  *
  * @param hdisp 数码管设备 handle
  */
-void display_init(display_handle_t *hdisp)
+void display_init(Display_HandleTypeDef *hdisp)
 {
   // 关闭测试模式
   display_transmit(hdisp, DISPLAYTEST_REG, 0);
@@ -56,7 +56,7 @@ void display_init(display_handle_t *hdisp)
  * <= 9 或 '0' <= data[i] <= '9', 则输出该数字代表的字型; 否则输出 '-' 字型.
  * @param size uint_16 字符串
  */
-void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size)
+void display_set(Display_HandleTypeDef *hdisp, uint8_t *data, uint16_t size)
 {
   uint8_t num;
 

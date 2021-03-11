@@ -58,7 +58,7 @@ static const uint16_t CIEL_8_12[] = {
     3504, 3542, 3579, 3617, 3656, 3694, 3733, 3773, 3812, 3852, 3892, 3932,
     3973, 4013, 4055, 4095};
 
-static bool pca9685_write_u8(pca9685_handle_t *handle, uint8_t address,
+static bool pca9685_write_u8(PCA9685_HandleTypeDef *handle, uint8_t address,
                              uint8_t value)
 {
   uint8_t data[] = {address, value};
@@ -66,7 +66,7 @@ static bool pca9685_write_u8(pca9685_handle_t *handle, uint8_t address,
                                  data, 2, PCA9685_I2C_TIMEOUT) == HAL_OK;
 }
 
-static bool pca9685_write_data(pca9685_handle_t *handle, uint8_t address,
+static bool pca9685_write_data(PCA9685_HandleTypeDef *handle, uint8_t address,
                                uint8_t *data, size_t length)
 {
   if (length == 0 || length > 4) {
@@ -83,7 +83,7 @@ static bool pca9685_write_data(pca9685_handle_t *handle, uint8_t address,
                                  PCA9685_I2C_TIMEOUT) == HAL_OK;
 }
 
-static bool pca9685_read_u8(pca9685_handle_t *handle, uint8_t address,
+static bool pca9685_read_u8(PCA9685_HandleTypeDef *handle, uint8_t address,
                             uint8_t *dest)
 {
   if (HAL_I2C_Master_Transmit(handle->i2c_handle, handle->device_address,
@@ -95,7 +95,7 @@ static bool pca9685_read_u8(pca9685_handle_t *handle, uint8_t address,
                                 dest, 1, PCA9685_I2C_TIMEOUT) == HAL_OK;
 }
 
-bool pca9685_init(pca9685_handle_t *handle)
+bool pca9685_init(PCA9685_HandleTypeDef *handle)
 {
   assert(handle->i2c_handle != NULL);
 
@@ -124,7 +124,7 @@ bool pca9685_init(pca9685_handle_t *handle)
   return success;
 }
 
-bool pca9685_is_sleeping(pca9685_handle_t *handle, bool *sleeping)
+bool pca9685_is_sleeping(PCA9685_HandleTypeDef *handle, bool *sleeping)
 {
   bool success = true;
 
@@ -138,7 +138,7 @@ bool pca9685_is_sleeping(pca9685_handle_t *handle, bool *sleeping)
   return success;
 }
 
-bool pca9685_sleep(pca9685_handle_t *handle)
+bool pca9685_sleep(PCA9685_HandleTypeDef *handle)
 {
   bool success = true;
 
@@ -154,7 +154,7 @@ bool pca9685_sleep(pca9685_handle_t *handle)
   return success;
 }
 
-bool pca9685_wakeup(pca9685_handle_t *handle)
+bool pca9685_wakeup(PCA9685_HandleTypeDef *handle)
 {
   bool success = true;
 
@@ -181,7 +181,7 @@ bool pca9685_wakeup(pca9685_handle_t *handle)
   return success;
 }
 
-bool pca9685_set_pwm_frequency(pca9685_handle_t *handle, float frequency)
+bool pca9685_set_pwm_frequency(PCA9685_HandleTypeDef *handle, float frequency)
 {
   assert(frequency >= 24);
   assert(frequency <= 1526);
@@ -210,7 +210,7 @@ bool pca9685_set_pwm_frequency(pca9685_handle_t *handle, float frequency)
   return success;
 }
 
-bool pca9685_set_channel_pwm_times(pca9685_handle_t *handle, unsigned channel,
+bool pca9685_set_channel_pwm_times(PCA9685_HandleTypeDef *handle, unsigned channel,
                                    unsigned on_time, unsigned off_time)
 {
   assert(channel >= 0);
@@ -227,7 +227,7 @@ bool pca9685_set_channel_pwm_times(pca9685_handle_t *handle, unsigned channel,
                             data, 4);
 }
 
-bool pca9685_set_channel_duty_cycle(pca9685_handle_t *handle, unsigned channel,
+bool pca9685_set_channel_duty_cycle(PCA9685_HandleTypeDef *handle, unsigned channel,
                                     float duty_cycle, bool logarithmic)
 {
   assert(duty_cycle >= 0.0);

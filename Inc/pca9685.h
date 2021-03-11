@@ -53,7 +53,7 @@ typedef struct {
    */
   bool inverted;
 
-} pca9685_handle_t;
+} PCA9685_HandleTypeDef;
 
 /**
  * Initialises a PCA9685 device by resetting registers to known values, setting
@@ -61,7 +61,7 @@ typedef struct {
  * @param handle Handle to a PCA9685 device.
  * @return True on success, false otherwise.
  */
-bool pca9685_init(pca9685_handle_t *handle);
+bool pca9685_init(PCA9685_HandleTypeDef *handle);
 
 /**
  * Tests if a PCA9685 is sleeping.
@@ -69,21 +69,21 @@ bool pca9685_init(pca9685_handle_t *handle);
  * @param sleeping Set to the sleeping state of the device.
  * @return True on success, false otherwise.
  */
-bool pca9685_is_sleeping(pca9685_handle_t *handle, bool *sleeping);
+bool pca9685_is_sleeping(PCA9685_HandleTypeDef *handle, bool *sleeping);
 
 /**
  * Puts a PCA9685 device into sleep mode.
  * @param handle Handle to a PCA9685 device.
  * @return True on success, false otherwise.
  */
-bool pca9685_sleep(pca9685_handle_t *handle);
+bool pca9685_sleep(PCA9685_HandleTypeDef *handle);
 
 /**
  * Wakes a PCA9685 device up from sleep mode.
  * @param handle Handle to a PCA9685 device.
  * @return True on success, false otherwise.
  */
-bool pca9685_wakeup(pca9685_handle_t *handle);
+bool pca9685_wakeup(PCA9685_HandleTypeDef *handle);
 
 /**
  * Sets the PWM frequency of a PCA9685 device for all channels.
@@ -92,7 +92,7 @@ bool pca9685_wakeup(pca9685_handle_t *handle);
  * @param frequency PWM frequency to set in Hertz.
  * @return True on success, false otherwise.
  */
-bool pca9685_set_pwm_frequency(pca9685_handle_t *handle, float frequency);
+bool pca9685_set_pwm_frequency(PCA9685_HandleTypeDef *handle, float frequency);
 
 /**
  * Sets the PWM on and off times for a channel of a PCA9685 device.
@@ -104,8 +104,9 @@ bool pca9685_set_pwm_frequency(pca9685_handle_t *handle, float frequency);
  * @param off_time PWM off time of the channel.
  * @return True on success, false otherwise.
  */
-bool pca9685_set_channel_pwm_times(pca9685_handle_t *handle, unsigned channel,
-                                   unsigned on_time, unsigned off_time);
+bool pca9685_set_channel_pwm_times(PCA9685_HandleTypeDef *handle,
+                                   unsigned channel, unsigned on_time,
+                                   unsigned off_time);
 
 /**
  * Helper function to set the PWM duty cycle for a channel of a PCA9685 device.
@@ -119,5 +120,6 @@ bool pca9685_set_channel_pwm_times(pca9685_handle_t *handle, unsigned channel,
  * @param logarithmic Set to true to apply logarithmic function.
  * @return True on success, false otherwise.
  */
-bool pca9685_set_channel_duty_cycle(pca9685_handle_t *handle, unsigned channel,
-                                    float duty_cycle, bool logarithmic);
+bool pca9685_set_channel_duty_cycle(PCA9685_HandleTypeDef *handle,
+                                    unsigned channel, float duty_cycle,
+                                    bool logarithmic);

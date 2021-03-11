@@ -7,7 +7,7 @@
  * @return true 初始化成功
  * @return false 初始化失败
  */
-bool pwm_init(pca9685_handle_t *hpca)
+bool pwm_init(PCA9685_HandleTypeDef *hpca)
 {
   if (pca9685_init(hpca))
     return true;
@@ -23,7 +23,7 @@ bool pwm_init(pca9685_handle_t *hpca)
  * @return true 设置成功
  * @return false 设置失败
  */
-bool pwm_set_duty_cycle(pwm_handle_t *hpwm, float duty_cycle)
+bool pwm_set_duty_cycle(PWM_HandleTypeDef *hpwm, float duty_cycle)
 {
   if (duty_cycle >= 0.0 && duty_cycle <= 1.0)
     return pca9685_set_channel_duty_cycle(hpwm->hpca, hpwm->channel, duty_cycle,
@@ -40,7 +40,7 @@ bool pwm_set_duty_cycle(pwm_handle_t *hpwm, float duty_cycle)
  * @return true 设置成功
  * @return false 设置失败
  */
-bool pwm_set_off_time(pwm_handle_t *hpwm, uint8_t off_time)
+bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint8_t off_time)
 {
   if (off_time >= 0 && off_time <= PWM_MAX_OFF_TIME)
     return pca9685_set_channel_pwm_times(hpwm->hpca, hpwm->channel, 0,

@@ -13,7 +13,7 @@ PWM 相关函数封装. I2C 使用默认配置即可.
 先创建一个 PCA9685 的 handle:
 
 ```c
-pca9685_handle_t hpca = {.i2c_handle = &hi2c1,
+PCA9685_HandleTypeDef hpca = {.i2c_handle = &hi2c1,
                            .device_address = PCA9865_I2C_DEFAULT_DEVICE_ADDRESS,
                            .inverted = false};
 ```
@@ -23,8 +23,8 @@ pca9685_handle_t hpca = {.i2c_handle = &hi2c1,
 然后创建 PWM 通道的 handle:
 
 ```c
-pwm_handle_t servo = {.hpca = &hpca, .channel = 0};
-pwm_handle_t motor = {.hpca = &hpca, .channel = 1};
+PWM_HandleTypeDef servo = {.hpca = &hpca, .channel = 0};
+PWM_HandleTypeDef motor = {.hpca = &hpca, .channel = 1};
 ```
 
 初始化 PWM 驱动板, PWM 频率为 50.0 Hz:
@@ -53,7 +53,7 @@ pwm_init(&hpca);
 先创建数码管的 handle 并初始化:
 
 ```c
-display_handle_t hdisp = {
+Display_HandleTypeDef hdisp = {
   .hspi = &hspi1,
   .cs_port = CS_GPIO_Port,
   .cs_pin = CS_Pin
@@ -80,7 +80,7 @@ display_set(hdisp, data2, 7);
 先创建陀螺仪的 handle:
 
 ```c
-gyro_handle_t hgyro = {.huart = &huart1};
+Gyro_HandleTypeDef hgyro = {.huart = &huart1};
 ```
 
 若要将陀螺仪的角度归零, 运行
@@ -128,7 +128,7 @@ GM65 模块应设置为命令触发模式, 单次读码时长无限长, 结束�
 首先创建二维码模块 handle
 
 ```c
-scanner_handle_t hscan = {.huart = &huart2};
+Scanner_HandleTypeDef hscan = {.huart = &huart2};
 ```
 
 在相应的 `UARTx_IRQHandler` 中插入中断处理函数

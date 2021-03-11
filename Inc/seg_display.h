@@ -15,9 +15,9 @@ typedef struct {
   SPI_HandleTypeDef *hspi; /** SPI Data Size = 8 Bits */
   GPIO_TypeDef *cs_port;
   uint16_t cs_pin;
-} display_handle_t;
+} Display_HandleTypeDef;
 
-void display_init(display_handle_t *hdisp);
-void display_set(display_handle_t *hdisp, uint8_t *data, uint16_t size);
+void display_init(Display_HandleTypeDef *hdisp);
+void display_set(Display_HandleTypeDef *hdisp, uint8_t *data, uint16_t size);
 
 #endif  // !__SEG_DISPLAY_H__

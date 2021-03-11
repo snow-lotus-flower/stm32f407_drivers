@@ -16,8 +16,8 @@ typedef struct {
   uint8_t buffer[SCANNER_BUFFER_SIZE];
   uint8_t result[8];
   bool new_data;
-} scanner_handle_t;
+} Scanner_HandleTypeDef;
 
-bool scanner_start(scanner_handle_t *hscan);
-bool scanner_IRQHandler(scanner_handle_t *hscan);
+bool scanner_start(Scanner_HandleTypeDef *hscan);
+bool scanner_IRQHandler(Scanner_HandleTypeDef *hscan);
 #endif  // !__CODE_SCANNER_H__

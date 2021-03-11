@@ -53,7 +53,7 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
  * @return true 成功
  * @return false 失败
  */
-bool gyro_start(gyro_handle_t *hgyro)
+bool gyro_start(Gyro_HandleTypeDef *hgyro)
 {
   __HAL_UART_ENABLE_IT(hgyro->huart, UART_IT_IDLE);
   hgyro->new_data = false;
@@ -68,7 +68,7 @@ bool gyro_start(gyro_handle_t *hgyro)
  * @return true 成功获取到陀螺仪数据
  * @return false 未获取到陀螺仪数据
  */
-bool gyro_IRQHandler(gyro_handle_t *hgyro)
+bool gyro_IRQHandler(Gyro_HandleTypeDef *hgyro)
 {
   bool success = false;
   if (__HAL_UART_GET_FLAG(hgyro->huart, UART_FLAG_IDLE)) {
@@ -109,7 +109,7 @@ bool gyro_IRQHandler(gyro_handle_t *hgyro)
  * @return true 成功
  * @return false 失败
  */
-bool gyro_set_zero(gyro_handle_t *hgyro)
+bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
 {
   static uint8_t command[] = {0xFF, 0xAA, 0x69, 0x88, 0xB5,
                               0xFF, 0xAA, 0x76, 0x00, 0x00};

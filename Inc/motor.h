@@ -23,12 +23,12 @@ typedef enum {
 typedef struct {
   GPIO_TypeDef *dir1_port;
   GPIO_TypeDef *dir2_port;
-  pwm_handle_t *hpwm;
+  PWM_HandleTypeDef *hpwm;
   uint16_t dir1_pin;
   uint16_t dir2_pin;
   float speed;
   bool brake;
-} motor_handle_t;
+} Motor_HandleTypeDef;
 
-void motor_speed_update(motor_handle_t *hmtr);
+void motor_speed_update(Motor_HandleTypeDef *hmtr);
 #endif  // !__MOTOR_H__
