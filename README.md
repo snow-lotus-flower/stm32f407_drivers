@@ -164,3 +164,19 @@ hscan.new_data = false; // 清除标志位
 ## motor.h / motor.c
 
 电机驱动. 对于每个电机, 需要开启两个 GPIO 输出方向信号, 一个 PWM 通道输出使能信号.
+
+### Example
+
+```c
+Motor_HandleTypeDef hmtrFL = {
+.brake = false,
+.dir1_pin = M1D0_Pin,
+.dir1_port = M1D0_GPIO_Port,
+.dir2_pin = M1D1_Pin,
+.dir2_port = M1D1_GPIO_Port,
+.hpwm = &motorFL_pwm,
+};
+pwm_init(hmtrFL.hpwm);
+hmtrFL.speed = 20.0; // cm/s
+motor_set_speed(&hmtrFL);
+```
