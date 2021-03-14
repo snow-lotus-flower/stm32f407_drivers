@@ -1,6 +1,7 @@
 #ifndef __GYROSCOPE_H__
 #define __GYROSCOPE_H__
 
+#include "cmsis_os.h"
 #include "stdbool.h"
 #include "stm32f4xx_hal.h"
 #define GYRO_BUFFER_SIZE 30
@@ -17,6 +18,8 @@ typedef struct {
   __IO float omega;
   uint8_t buffer[GYRO_BUFFER_SIZE];
   bool new_data;
+  uint32_t zero_ticks;
+  float drifting_rate;
 } Gyro_HandleTypeDef;
 
 bool gyro_start(Gyro_HandleTypeDef *hgyro);

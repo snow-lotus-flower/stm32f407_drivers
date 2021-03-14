@@ -90,7 +90,9 @@ bool gyro_IRQHandler(Gyro_HandleTypeDef *hgyro)
         hgyro->omega = hgyro->degree_raw * 2000.0 / (2 << 14);
         uint8_t yawH = hgyro->buffer[18], yawL = hgyro->buffer[17];
         hgyro->degree_raw = (int16_t)(((uint16_t)yawH << 8) | yawL);
-        hgyro->degree = hgyro->degree_raw * 180.0 / (2 << 14);
+        hgyro->degree =
+            hgyro->degree_raw * 180.0 / (2 << 14) -
+            hgyro->drifting_rate * (osKernelGetTickCount() - hgyro->zero_ticks);
         hgyro->new_data = true;
         success = true;
       }
@@ -113,6 +115,7 @@ bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
 {
   static uint8_t command[] = {0xFF, 0xAA, 0x69, 0x88, 0xB5,
                               0xFF, 0xAA, 0x76, 0x00, 0x00};
+  hgyro->zero_ticks = osKernelGetTickCount();
   if (HAL_UART_Transmit_DMA(hgyro->huart, command, 10) == HAL_OK)
     return true;
   else
