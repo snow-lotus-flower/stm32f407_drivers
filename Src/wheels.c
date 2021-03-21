@@ -68,7 +68,7 @@ void all_wheels_move_xy_delta(AllWheels_HandleTypeDef *hawhl, float x, float y,
 {
   int16_t beginFL, beginFR, beginRL, beginRR;
   float deltaFL, deltaFR, deltaRL, deltaRR;
-  float deltax, deltay, endx, endy;
+  float deltax, deltay;
   float speedx, speedy;
   float rad;
   bool x_cont = true, y_cont = true;
