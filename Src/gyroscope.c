@@ -92,10 +92,10 @@ bool gyro_IRQHandler(Gyro_HandleTypeDef *hgyro)
         hgyro->omega_raw = (int16_t)(((uint16_t)wzH << 8) | wzL);
         hgyro->omega = hgyro->omega_raw * 2000.0 / (2 << 14);
         uint8_t yawH = hgyro->buffer[18], yawL = hgyro->buffer[17];
-        hgyro->degree_raw =
+        hgyro->degree_raw = -(
             (int16_t)(((uint16_t)yawH << 8) | yawL) -
             gyro_real_deg_to_raw(hgyro->drifting_rate *
-                                 (osKernelGetTickCount() - hgyro->zero_ticks));
+                                 (osKernelGetTickCount() - hgyro->zero_ticks)));
         hgyro->degree = gyro_raw_to_real_deg(hgyro->degree_raw);
         hgyro->logic_degree = gyro_raw_to_real_deg(
             hgyro->degree_raw - hgyro->logic_degree_zero_raw);
