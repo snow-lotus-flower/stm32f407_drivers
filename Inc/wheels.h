@@ -12,7 +12,7 @@
 typedef struct {
   Encoder_HandleTypeDef *henc;
   Motor_HandleTypeDef *hmtr;
-  PID_HandleTypeDef *hpid;
+  PIDWheel_HandleTypeDef *hpid;
   float real_speed; /** cm/s */
 } Wheel_HandleTypeDef;
 
@@ -37,10 +37,13 @@ typedef struct {
   Wheel_HandleTypeDef *RR;
   Gyro_HandleTypeDef *hgyro;
   Scanner_HandleTypeDef *hscan;
+  PIDYaw_HandleTypeDef *hpid_yaw;
 
   SpeedComponents speed_components;
-  osTimerId_t htim_pid;
-  uint32_t tim_ticks_pid;
+  osTimerId_t htim_pid_wheel;
+  uint32_t tim_ticks_pid_wheel;
+  osTimerId_t htim_pid_yaw;
+  uint32_t tim_ticks_pid_yaw;
   osTimerId_t htim_enc;
   uint32_t tim_ticks_enc;
   osTimerId_t htim_spd;
@@ -50,11 +53,11 @@ typedef struct {
   float length_separation;
 } AllWheels_HandleTypeDef;
 
-float calc_real_dis(AllWheels_HandleTypeDef *hawhl, int16_t counter);
+float counter_to_real_dis(AllWheels_HandleTypeDef *hawhl, int16_t counter);
 void all_wheels_set_speed(AllWheels_HandleTypeDef *hawhl, float x, float y,
                           float yaw);
 void all_wheels_start_encoder(AllWheels_HandleTypeDef *hawhl);
-void all_wheels_start_pid(AllWheels_HandleTypeDef *hawhl);
+void all_wheels_start_pid_wheel(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_start_speed_composition(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_set_main_speed(AllWheels_HandleTypeDef *hawhl, float x,
                                float y);

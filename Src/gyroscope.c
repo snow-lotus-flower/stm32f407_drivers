@@ -46,6 +46,9 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
   return HAL_OK;
 }
 
+float gyro_raw_to_real_deg(int16_t raw) { return raw * 180.0 / (1 << 15); }
+int16_t gyro_real_deg_to_raw(float deg) { return deg * (1 << 15) / 180.0; }
+
 /**
  * @brief 启动陀螺仪数据获取
  *
@@ -87,12 +90,15 @@ bool gyro_IRQHandler(Gyro_HandleTypeDef *hgyro)
           hgyro->buffer[12] == 0x53 && hgyro->buffer[21] == checksum_yaw) {
         uint8_t wzH = hgyro->buffer[7], wzL = hgyro->buffer[6];
         hgyro->omega_raw = (int16_t)(((uint16_t)wzH << 8) | wzL);
-        hgyro->omega = hgyro->degree_raw * 2000.0 / (2 << 14);
+        hgyro->omega = hgyro->omega_raw * 2000.0 / (2 << 14);
         uint8_t yawH = hgyro->buffer[18], yawL = hgyro->buffer[17];
-        hgyro->degree_raw = (int16_t)(((uint16_t)yawH << 8) | yawL);
-        hgyro->degree =
-            hgyro->degree_raw * 180.0 / (2 << 14) -
-            hgyro->drifting_rate * (osKernelGetTickCount() - hgyro->zero_ticks);
+        hgyro->degree_raw =
+            (int16_t)(((uint16_t)yawH << 8) | yawL) -
+            gyro_real_deg_to_raw(hgyro->drifting_rate *
+                                 (osKernelGetTickCount() - hgyro->zero_ticks));
+        hgyro->degree = gyro_raw_to_real_deg(hgyro->degree_raw);
+        hgyro->logic_degree = gyro_raw_to_real_deg(
+            hgyro->degree_raw - hgyro->logic_degree_zero_raw);
         hgyro->new_data = true;
         success = true;
       }
@@ -120,4 +126,14 @@ bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
     return true;
   else
     return false;
+}
+
+bool gyro_set_logic_zero(Gyro_HandleTypeDef *hgyro)
+{
+  hgyro->logic_degree_zero_raw = hgyro->degree_raw;
+}
+
+bool gyro_set_logic_zero_as(Gyro_HandleTypeDef *hgyro, int16_t deg_zero_raw)
+{
+  hgyro->logic_degree_zero_raw = deg_zero_raw;
 }
