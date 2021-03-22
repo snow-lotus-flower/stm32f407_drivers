@@ -131,9 +131,11 @@ bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
 bool gyro_set_logic_zero(Gyro_HandleTypeDef *hgyro)
 {
   hgyro->logic_degree_zero_raw = hgyro->degree_raw;
+  return true;
 }
 
 bool gyro_set_logic_zero_as(Gyro_HandleTypeDef *hgyro, int16_t deg_zero_raw)
 {
   hgyro->logic_degree_zero_raw = deg_zero_raw;
+  return true;
 }
