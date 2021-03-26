@@ -115,6 +115,7 @@ void PID_yaw_realize(PIDYaw_HandleTypeDef *pid)
       pid->integral += pid->error;
     }
   }
+  index = 0;
   if (fabs(pid->error) < 0.5) pid->integral = 0;
   float integral = pid->Ki * pid->integral;
   if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;

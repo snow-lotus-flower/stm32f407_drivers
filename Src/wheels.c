@@ -4,6 +4,7 @@ void EncoderTimerCallback(void *argument);
 void PIDWheelTimerCallback(void *argument);
 void SpeedCompositionTimerCallback(void *argument);
 void PIDYawTimerCallback(void *argument);
+void PWMSetTimerCallback(void *argument);
 
 float sgn(float x) { return x == 0.0 ? 0.0 : x > 0.0 ? 1.0 : -1.0; }
 
@@ -34,6 +35,15 @@ void all_wheels_start_pid_wheel(AllWheels_HandleTypeDef *hawhl)
                    &(osTimerAttr_t){.name = "PIDWheelTimer"});
   }
   osTimerStart(hawhl->htim_pid_wheel, hawhl->tim_ticks_pid_wheel);
+}
+
+void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl)
+{
+  if (hawhl->htim_pwm == NULL) {
+    hawhl->htim_pwm = osTimerNew(PWMSetTimerCallback, osTimerPeriodic, hawhl,
+                                 &(osTimerAttr_t){.name = "PWMSetTimer"});
+  }
+  osTimerStart(hawhl->htim_pwm, hawhl->tim_ticks_pwm);
 }
 
 void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl)
@@ -182,10 +192,11 @@ void PIDWheelTimerCallback(void *argument)
   hawhl->RL->hmtr->speed = hawhl->RL->hpid->voltage;
   hawhl->RR->hmtr->speed = hawhl->RR->hpid->voltage;
 
-  motor_speed_update(hawhl->FL->hmtr);
-  motor_speed_update(hawhl->FR->hmtr);
-  motor_speed_update(hawhl->RL->hmtr);
-  motor_speed_update(hawhl->RR->hmtr);
+  // motor_speed_update(hawhl->FL->hmtr);
+  // motor_speed_update(hawhl->FR->hmtr);
+  // motor_speed_update(hawhl->RL->hmtr);
+  // motor_speed_update(hawhl->RR->hmtr);
+  PWMSetTimerCallback(hawhl);
 }
 
 void EncoderTimerCallback(void *argument)
@@ -208,4 +219,45 @@ void SpeedCompositionTimerCallback(void *argument)
       hawhl, hawhl->speed_components.main_x + hawhl->speed_components.offset_x,
       hawhl->speed_components.main_y + hawhl->speed_components.offset_y,
       hawhl->speed_components.gyro_yaw);
+}
+
+void PWMSetTimerCallback(void *argument)
+{
+  AllWheels_HandleTypeDef *hawl = (AllWheels_HandleTypeDef *)argument;
+  static float last_FL, last_FR, last_RL, last_RR;
+  static uint16_t last_waist, last_shoulder, last_elbow, last_hand;
+
+  if (last_FL != hawl->FL->hmtr->speed) {
+    last_FL = hawl->FL->hmtr->speed;
+    motor_speed_update(hawl->FL->hmtr);
+  }
+  if (last_FR != hawl->FR->hmtr->speed) {
+    last_FR = hawl->FR->hmtr->speed;
+    motor_speed_update(hawl->FR->hmtr);
+  }
+  if (last_RL != hawl->RL->hmtr->speed) {
+    last_RL = hawl->RL->hmtr->speed;
+    motor_speed_update(hawl->RL->hmtr);
+  }
+  if (last_RR != hawl->RR->hmtr->speed) {
+    last_RR = hawl->RR->hmtr->speed;
+    motor_speed_update(hawl->RR->hmtr);
+  }
+
+  if (last_waist != hawl->hsrv_waist->pos) {
+    last_waist = hawl->hsrv_waist->pos;
+    servo_position_update(hawl->hsrv_waist);
+  }
+  if (last_shoulder != hawl->hsrv_shoulder->pos) {
+    last_shoulder = hawl->hsrv_shoulder->pos;
+    servo_position_update(hawl->hsrv_shoulder);
+  }
+  if (last_elbow != hawl->hsrv_elbow->pos) {
+    last_elbow = hawl->hsrv_elbow->pos;
+    servo_position_update(hawl->hsrv_elbow);
+  }
+  if (last_hand != hawl->hsrv_hand->pos) {
+    last_hand = hawl->hsrv_hand->pos;
+    servo_position_update(hawl->hsrv_hand);
+  }
 }

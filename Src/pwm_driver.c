@@ -40,7 +40,7 @@ bool pwm_set_duty_cycle(PWM_HandleTypeDef *hpwm, float duty_cycle)
  * @return true 设置成功
  * @return false 设置失败
  */
-bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint8_t off_time)
+bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint16_t off_time)
 {
   if (off_time >= 0 && off_time <= PWM_MAX_OFF_TIME)
     return pca9685_set_channel_pwm_times(hpwm->hpca, hpwm->channel, 0,

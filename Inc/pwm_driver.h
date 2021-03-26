@@ -12,6 +12,6 @@ typedef struct {
 
 bool pwm_init(PCA9685_HandleTypeDef *hpca);
 bool pwm_set_duty_cycle(PWM_HandleTypeDef *hpwm, float duty_cycle);
-bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint8_t off_time);
+bool pwm_set_off_time(PWM_HandleTypeDef *hpwm, uint16_t off_time);
 
 #endif  // !__PWM_DRIVER_H__
