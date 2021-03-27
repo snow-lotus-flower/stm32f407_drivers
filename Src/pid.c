@@ -55,6 +55,7 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
     }
   }
   float integral = pid->Ki * pid->integral;
+  if (pid->SetSpeed == 0.0 && pid->AltualSpeed == 0) pid->integral = 0;
   if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;
   if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
   pid->voltage = pid->Kp * pid->error + index * pid->Ki * pid->integral +
@@ -124,5 +125,6 @@ void PID_yaw_realize(PIDYaw_HandleTypeDef *pid)
                pid->Kd * (pid->error - pid->erro_last);
   if (pid->omega > pid->max) pid->omega = pid->max;
   if (pid->omega < pid->min) pid->omega = pid->min;
+  if (fabs(pid->error) < 0.5) pid->omega = 0.0;
   pid->erro_last = pid->error;
 }
