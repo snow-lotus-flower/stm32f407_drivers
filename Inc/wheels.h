@@ -5,6 +5,7 @@
 #include "code_scanner.h"
 #include "encoder.h"
 #include "gyroscope.h"
+#include "laser.h"
 #include "math.h"
 #include "motor.h"
 #include "openmv.h"
@@ -42,10 +43,12 @@ typedef struct {
   Wheel_HandleTypeDef *FR;
   Wheel_HandleTypeDef *RL;
   Wheel_HandleTypeDef *RR;
+
   Gyro_HandleTypeDef *hgyro;
   Scanner_HandleTypeDef *hscan;
   Openmv_HandleTypeDef *hopmv;
   PIDYaw_HandleTypeDef *hpid_yaw;
+  Laser_HandleTypeDef *hlas_front;
 
   Servo_HandleTypeDef *hsrv_waist;
   Servo_HandleTypeDef *hsrv_shoulder;

@@ -223,41 +223,41 @@ void SpeedCompositionTimerCallback(void *argument)
 
 void PWMSetTimerCallback(void *argument)
 {
-  AllWheels_HandleTypeDef *hawl = (AllWheels_HandleTypeDef *)argument;
+  AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
   static float last_FL, last_FR, last_RL, last_RR;
   static uint16_t last_waist, last_shoulder, last_elbow, last_hand;
 
-  if (last_FL != hawl->FL->hmtr->speed) {
-    last_FL = hawl->FL->hmtr->speed;
-    motor_speed_update(hawl->FL->hmtr);
+  if (last_FL != hawhl->FL->hmtr->speed) {
+    last_FL = hawhl->FL->hmtr->speed;
+    motor_speed_update(hawhl->FL->hmtr);
   }
-  if (last_FR != hawl->FR->hmtr->speed) {
-    last_FR = hawl->FR->hmtr->speed;
-    motor_speed_update(hawl->FR->hmtr);
+  if (last_FR != hawhl->FR->hmtr->speed) {
+    last_FR = hawhl->FR->hmtr->speed;
+    motor_speed_update(hawhl->FR->hmtr);
   }
-  if (last_RL != hawl->RL->hmtr->speed) {
-    last_RL = hawl->RL->hmtr->speed;
-    motor_speed_update(hawl->RL->hmtr);
+  if (last_RL != hawhl->RL->hmtr->speed) {
+    last_RL = hawhl->RL->hmtr->speed;
+    motor_speed_update(hawhl->RL->hmtr);
   }
-  if (last_RR != hawl->RR->hmtr->speed) {
-    last_RR = hawl->RR->hmtr->speed;
-    motor_speed_update(hawl->RR->hmtr);
+  if (last_RR != hawhl->RR->hmtr->speed) {
+    last_RR = hawhl->RR->hmtr->speed;
+    motor_speed_update(hawhl->RR->hmtr);
   }
 
-  if (last_waist != hawl->hsrv_waist->pos) {
-    last_waist = hawl->hsrv_waist->pos;
-    servo_position_update(hawl->hsrv_waist);
+  if (last_waist != hawhl->hsrv_waist->pos) {
+    last_waist = hawhl->hsrv_waist->pos;
+    servo_position_update(hawhl->hsrv_waist);
   }
-  if (last_shoulder != hawl->hsrv_shoulder->pos) {
-    last_shoulder = hawl->hsrv_shoulder->pos;
-    servo_position_update(hawl->hsrv_shoulder);
+  if (last_shoulder != hawhl->hsrv_shoulder->pos) {
+    last_shoulder = hawhl->hsrv_shoulder->pos;
+    servo_position_update(hawhl->hsrv_shoulder);
   }
-  if (last_elbow != hawl->hsrv_elbow->pos) {
-    last_elbow = hawl->hsrv_elbow->pos;
-    servo_position_update(hawl->hsrv_elbow);
+  if (last_elbow != hawhl->hsrv_elbow->pos) {
+    last_elbow = hawhl->hsrv_elbow->pos;
+    servo_position_update(hawhl->hsrv_elbow);
   }
-  if (last_hand != hawl->hsrv_hand->pos) {
-    last_hand = hawl->hsrv_hand->pos;
-    servo_position_update(hawl->hsrv_hand);
+  if (last_hand != hawhl->hsrv_hand->pos) {
+    last_hand = hawhl->hsrv_hand->pos;
+    servo_position_update(hawhl->hsrv_hand);
   }
 }
