@@ -128,6 +128,13 @@ bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
     return false;
 }
 
+/**
+ * @brief 将当前值作为逻辑零值
+ *
+ * @param hgyro 陀螺仪 handle
+ * @return true 成功
+ * @return false 失败
+ */
 bool gyro_set_logic_zero(Gyro_HandleTypeDef *hgyro)
 {
   // TODO: Fix zero drifting bugs
@@ -135,6 +142,14 @@ bool gyro_set_logic_zero(Gyro_HandleTypeDef *hgyro)
   return true;
 }
 
+/**
+ * @brief 指定逻辑零值
+ *
+ * @param hgyro 陀螺仪 handle
+ * @param deg_zero_raw 零角度的 raw 值
+ * @return true 成功
+ * @return false 失败
+ */
 bool gyro_set_logic_zero_as(Gyro_HandleTypeDef *hgyro, int16_t deg_zero_raw)
 {
   hgyro->logic_degree_zero_raw = deg_zero_raw;

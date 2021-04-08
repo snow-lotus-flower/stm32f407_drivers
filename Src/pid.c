@@ -3,6 +3,7 @@
 #include "stdlib.h"
 #include "tim.h"
 
+/** 轮速闭环 PID */
 void PID_wheel_init(PIDWheel_HandleTypeDef *pid)
 {
   pid->SetSpeed = 0.0;

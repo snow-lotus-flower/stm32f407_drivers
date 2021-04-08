@@ -5,9 +5,13 @@
 
 #define PWM_MAX_OFF_TIME 4096
 
+/**
+ * @brief PWM 通道 handle
+ *
+ */
 typedef struct {
-  PCA9685_HandleTypeDef *hpca;
-  uint8_t channel;
+  PCA9685_HandleTypeDef *hpca; /** PCA9685 芯片 handle */
+  uint8_t channel;             /** 通道数字, [0, 15] */
 } PWM_HandleTypeDef;
 
 bool pwm_init(PCA9685_HandleTypeDef *hpca);

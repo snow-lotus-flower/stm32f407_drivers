@@ -1,5 +1,11 @@
 #include "motor.h"
 
+/**
+ * @brief 设置电机的旋转防向
+ *
+ * @param hmtr 电机 handle
+ * @param dir MotorDirection 类型的方向值
+ */
 static void motor_set_direction(Motor_HandleTypeDef *hmtr, MotorDirection dir)
 {
   GPIO_PinState dir1_state;

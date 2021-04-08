@@ -38,6 +38,13 @@ static HAL_StatusTypeDef HAL_UART_DMAStopRx(UART_HandleTypeDef *huart)
   return HAL_OK;
 }
 
+/**
+ * @brief 启动 OpenMV 串口接收, 开启中断
+ *
+ * @param hopmv OpenMV 颜色识别 handle
+ * @return true 成功
+ * @return false 失败
+ */
 bool openmv_start(Openmv_HandleTypeDef *hopmv)
 {
   __HAL_UART_ENABLE_IT(hopmv->huart, UART_IT_IDLE);
@@ -46,6 +53,13 @@ bool openmv_start(Openmv_HandleTypeDef *hopmv)
                               OPENMV_BUFFER_SIZE) == HAL_OK;
 }
 
+/**
+ * @brief OpenMV 串口中断处理函数
+ *
+ * @param hopmv OpenMV 颜色识别 handle
+ * @return true 成功
+ * @return false 失败
+ */
 bool openmv_IRQHandler(Openmv_HandleTypeDef *hopmv)
 {
   bool success = false;
