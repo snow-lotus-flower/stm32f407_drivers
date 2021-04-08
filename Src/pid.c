@@ -60,8 +60,8 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
   if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
   pid->voltage = pid->Kp * pid->error + index * pid->Ki * pid->integral +
                  pid->Kd * (pid->error - pid->erro_last);
-  if (pid->voltage > 0.3) pid->voltage = 0.3;
-  if (pid->voltage < -0.3) pid->voltage = -0.3;
+  if (pid->voltage > 0.6) pid->voltage = 0.6;
+  if (pid->voltage < -0.6) pid->voltage = -0.6;
   pid->erro_last = pid->error;
 }
 

@@ -12,9 +12,9 @@ typedef struct {
   float Kp, Ki, Kd;   //定义比例、积分、微分系数
   float voltage;      //定义电压值（控制执行器的变量）
   float integral;     //定义积分值
-  float umax;
-  float umin;
-  float imax;
+  float umax;         //
+  float umin;         //
+  float imax;         //
   float imin;
 } PIDWheel_HandleTypeDef;
 

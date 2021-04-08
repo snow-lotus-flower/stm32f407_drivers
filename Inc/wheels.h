@@ -34,6 +34,10 @@ typedef struct {
   float main_x;
   float main_y;
   float gyro_yaw;
+  float laser_x;
+  float laser_y;
+  bool laser_x_en;
+  bool laser_y_en;
   float offset_x;
   float offset_y;
 } SpeedComponents;
@@ -48,7 +52,9 @@ typedef struct {
   Scanner_HandleTypeDef *hscan;
   Openmv_HandleTypeDef *hopmv;
   PIDYaw_HandleTypeDef *hpid_yaw;
+
   Laser_HandleTypeDef *hlas_front;
+  Laser_HandleTypeDef *hlas_left;
 
   Servo_HandleTypeDef *hsrv_waist;
   Servo_HandleTypeDef *hsrv_shoulder;
@@ -56,6 +62,7 @@ typedef struct {
   Servo_HandleTypeDef *hsrv_hand;
 
   SpeedComponents speed_components;
+
   osTimerId_t htim_pid_wheel;
   uint32_t tim_ticks_pid_wheel;
   osTimerId_t htim_pid_yaw;
