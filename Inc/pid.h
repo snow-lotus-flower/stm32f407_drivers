@@ -41,9 +41,30 @@ typedef struct {
   float imin;        // 积分项最小值, rad/s
 } PIDYaw_HandleTypeDef;
 
+/**
+ * @brief 激光定位 PID
+ *
+ */
+typedef struct {
+  float SetDistance;     // 目标距离值, cm
+  float AltualDistance;  // 当前实际距离, cm
+  float error;           // 距离误差, SetDistance - AltualDistance
+  float erromax;         // 积分分离后, 开始进行积分的阈值
+  float erro_last;       // 上一次的距离误差
+  float Kp, Ki, Kd;      // 比例、积分、微分系数
+  float velocity;        // 输出的速度值, cm/s
+  float integral;        // 积分项, cm/s
+  float max;             // 输出允许的最大速度, cm/s
+  float min;             // 输出允许的最小速度, cm/s
+  float imax;            // 积分项最大值, cm/s
+  float imin;            // 积分项最小值, cm/s
+} PIDLaser_HandleTypeDef;
+
 void PID_wheel_init(PIDWheel_HandleTypeDef *pid);
 void PID_wheel_realize(PIDWheel_HandleTypeDef *pid);
 void PID_yaw_init(PIDYaw_HandleTypeDef *pid);
 void PID_yaw_realize(PIDYaw_HandleTypeDef *pid);
+void PID_laser_init(PIDLaser_HandleTypeDef *pid);
+void PID_laser_realize(PIDLaser_HandleTypeDef *pid);
 
 #endif /* __PID_H__ */

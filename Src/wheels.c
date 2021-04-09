@@ -6,6 +6,12 @@ void SpeedCompositionTimerCallback(void *argument);
 void PIDYawTimerCallback(void *argument);
 void PWMSetTimerCallback(void *argument);
 
+/**
+ * @brief 符号函数 x = 0 时, 返回 0; x > 0 时, 返回 1; x < 0 时, 返回 -1;
+ *
+ * @param x
+ * @return float
+ */
 float sgn(float x) { return x == 0.0 ? 0.0 : x > 0.0 ? 1.0 : -1.0; }
 
 void all_wheels_start_encoder(AllWheels_HandleTypeDef *hawhl)

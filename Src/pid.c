@@ -46,7 +46,6 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid) {
         pid->integral += pid->error;
       }
     }
-
   } else if (pid->voltage < pid->umin) {
     if (fabs(pid->error > pid->erromax)) {
       index = 0;
@@ -143,5 +142,67 @@ void PID_yaw_realize(PIDYaw_HandleTypeDef *pid) {
   if (pid->omega > pid->max) pid->omega = pid->max;
   if (pid->omega < pid->min) pid->omega = pid->min;
   if (fabs(pid->error) < 0.5) pid->omega = 0.0;
+  pid->erro_last = pid->error;
+}
+
+void PID_laser_init(PIDLaser_HandleTypeDef *pid) {
+  pid->SetDistance = 0.0;
+  pid->AltualDistance = 0.0;
+  pid->error = 0.0;
+  pid->erromax = 20.0;
+  pid->erro_last = 0.0;
+  pid->velocity = 0.0;
+  pid->integral = 0.0;
+  pid->Kp = 1;
+  pid->Ki = 0.2;
+  pid->Kd = 0.5;
+  pid->max = 60.0;
+  pid->min = -60.0;
+  pid->imax = 10;
+  pid->imin = -10;
+}
+
+void PID_laser_realize(PIDLaser_HandleTypeDef *pid) {
+  int index;
+  pid->error = pid->SetDistance - pid->AltualDistance;
+
+  if (pid->velocity >= pid->max) {
+    if (fabs(pid->error) > pid->erromax)  //�ǵ���ǰ����� #include "stdlib.h"
+    {
+      index = 0;
+    } else {
+      index = 1;
+      if (pid->error < 0) {
+        pid->integral += pid->error;
+      }
+    }
+
+  } else if (pid->velocity < pid->min) {
+    if (fabs(pid->error > pid->erromax)) {
+      index = 0;
+    } else {
+      index = 1;
+      if (pid->error > 0) {
+        pid->integral += pid->error;
+      }
+    }
+  } else {
+    if (fabs(pid->error > pid->erromax)) {
+      index = 0;
+    } else {
+      index = 1;
+      pid->integral += pid->error;
+    }
+  }
+  index = 0;
+  if (fabs(pid->error) < 0.5) pid->integral = 0;
+  float integral = pid->Ki * pid->integral;
+  if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;
+  if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
+  pid->velocity = pid->Kp * pid->error + index * pid->Ki * pid->integral +
+                  pid->Kd * (pid->error - pid->erro_last);
+  if (pid->velocity > pid->max) pid->velocity = pid->max;
+  if (pid->velocity < pid->min) pid->velocity = pid->min;
+  if (fabs(pid->error) < 0.2) pid->velocity = 0.0;
   pid->erro_last = pid->error;
 }

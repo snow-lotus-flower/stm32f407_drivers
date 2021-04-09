@@ -137,7 +137,6 @@ bool gyro_set_zero(Gyro_HandleTypeDef *hgyro)
  */
 bool gyro_set_logic_zero(Gyro_HandleTypeDef *hgyro)
 {
-  // TODO: Fix zero drifting bugs
   hgyro->logic_degree_zero_raw = hgyro->degree_raw;
   return true;
 }
