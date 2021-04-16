@@ -72,7 +72,7 @@ void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl)
 void all_wheels_start_pid_laser(AllWheels_HandleTypeDef *hawhl)
 {
   if (hawhl->htim_pid_laser == NULL) {
-    hawhl->htim_pid_yaw =
+    hawhl->htim_pid_laser =
         osTimerNew(PIDLaserTimerCallback, osTimerPeriodic, hawhl,
                    &(osTimerAttr_t){.name = "PIDLaserTimer"});
   }

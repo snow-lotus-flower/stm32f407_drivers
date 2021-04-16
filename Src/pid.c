@@ -170,10 +170,11 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
 void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
 {
   int index;
-  pid->error = pid->SetDistance - pid->AltualDistance;
+//  pid->error = pid->SetDistance - pid->AltualDistance;
+  pid->error = pid->AltualDistance - pid->SetDistance;
 
   if (pid->velocity >= pid->max) {
-    if (fabs(pid->error) > pid->erromax)  //�ǵ���ǰ����� #include "stdlib.h"
+    if (fabs(pid->error) > pid->erromax)
     {
       index = 0;
     } else {
