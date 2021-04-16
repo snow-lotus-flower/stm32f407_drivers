@@ -52,9 +52,11 @@ typedef struct {
   Scanner_HandleTypeDef *hscan;
   Openmv_HandleTypeDef *hopmv;
   PIDYaw_HandleTypeDef *hpid_yaw;
+  PIDLaser_HandleTypeDef *hpid_las_x;
+  PIDLaser_HandleTypeDef *hpid_las_y;
 
-  Laser_HandleTypeDef *hlas_front;
-  Laser_HandleTypeDef *hlas_left;
+  Laser_HandleTypeDef *hlas_x;
+  Laser_HandleTypeDef *hlas_y;
 
   Servo_HandleTypeDef *hsrv_waist;
   Servo_HandleTypeDef *hsrv_shoulder;
@@ -73,6 +75,9 @@ typedef struct {
   uint32_t tim_ticks_spd;
   osTimerId_t htim_pwm;
   uint32_t tim_ticks_pwm;
+  osTimerId_t htim_pid_laser;
+  uint32_t tim_ticks_pid_laser;
+
   float perimeter;
   float width_separation;
   float length_separation;
@@ -98,5 +103,11 @@ void all_wheels_set_main_speed(AllWheels_HandleTypeDef *hawhl, float x,
                                float y);
 void all_wheels_move_xy_delta(AllWheels_HandleTypeDef *hawhl, float x, float y,
                               float speed);
+
+void all_wheels_start_pid_laser(AllWheels_HandleTypeDef *hawhl);
+void set_laser_x_enable(AllWheels_HandleTypeDef *hawhl, bool en);
+void set_laser_y_enable(AllWheels_HandleTypeDef *hawhl, bool en);
+void laser_goto_x(AllWheels_HandleTypeDef *hawhl, float dis);
+void laser_goto_y(AllWheels_HandleTypeDef *hawhl, float dis);
 
 #endif  // !__WHEELS_H__

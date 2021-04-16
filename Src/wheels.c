@@ -5,6 +5,7 @@ void PIDWheelTimerCallback(void *argument);
 void SpeedCompositionTimerCallback(void *argument);
 void PIDYawTimerCallback(void *argument);
 void PWMSetTimerCallback(void *argument);
+void PIDLaserTimerCallback(void *argument);
 
 /**
  * @brief 符号函数 x = 0 时, 返回 0; x > 0 时, 返回 1; x < 0 时, 返回 -1;
@@ -66,6 +67,54 @@ void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl)
                    &(osTimerAttr_t){.name = "PIDYawTimer"});
   }
   osTimerStart(hawhl->htim_pid_yaw, hawhl->tim_ticks_pid_yaw);
+}
+
+void all_wheels_start_pid_laser(AllWheels_HandleTypeDef *hawhl)
+{
+  if (hawhl->htim_pid_laser == NULL) {
+    hawhl->htim_pid_yaw =
+        osTimerNew(PIDLaserTimerCallback, osTimerPeriodic, hawhl,
+                   &(osTimerAttr_t){.name = "PIDLaserTimer"});
+  }
+  osTimerStart(hawhl->htim_pid_laser, hawhl->tim_ticks_pid_laser);
+}
+
+void set_laser_x_enable(AllWheels_HandleTypeDef *hawhl, bool en)
+{
+  if (en) {
+    if (!hawhl->speed_components.laser_x_en) {
+      hawhl->speed_components.laser_x_en = true;
+      hawhl->speed_components.laser_x = 0.;
+      PID_laser_init(hawhl->hpid_las_x);
+    }
+  } else {
+    hawhl->speed_components.laser_x_en = false;
+  }
+}
+
+void set_laser_y_enable(AllWheels_HandleTypeDef *hawhl, bool en)
+{
+  if (en) {
+    if (!hawhl->speed_components.laser_y_en) {
+      hawhl->speed_components.laser_y_en = true;
+      hawhl->speed_components.laser_y = 0.;
+      PID_laser_init(hawhl->hpid_las_y);
+    }
+  } else {
+    hawhl->speed_components.laser_y_en = false;
+  }
+}
+
+void laser_goto_x(AllWheels_HandleTypeDef *hawhl, float dis)
+{
+  set_laser_x_enable(hawhl, true);
+  hawhl->hpid_las_x->SetDistance = dis;
+}
+
+void laser_goto_y(AllWheels_HandleTypeDef *hawhl, float dis)
+{
+  set_laser_y_enable(hawhl, true);
+  hawhl->hpid_las_y->SetDistance = dis;
 }
 
 void all_wheels_set_speed(AllWheels_HandleTypeDef *hawhl, float x, float y,
@@ -141,9 +190,6 @@ void all_wheels_move_xy_delta(AllWheels_HandleTypeDef *hawhl, float x, float y,
 
 void all_wheels_start_speed_composition(AllWheels_HandleTypeDef *hawhl)
 {
-  all_wheels_start_pid_wheel(hawhl);
-  all_wheels_start_pid_yaw(hawhl);
-
   if (hawhl->htim_spd == NULL) {
     hawhl->htim_spd =
         osTimerNew(SpeedCompositionTimerCallback, osTimerPeriodic, hawhl,
@@ -177,6 +223,20 @@ void PIDYawTimerCallback(void *argument)
   hawhl->hpid_yaw->AltualDeg = hawhl->hgyro->logic_degree;
   PID_yaw_realize(hawhl->hpid_yaw);
   hawhl->speed_components.gyro_yaw = hawhl->hpid_yaw->omega;
+}
+
+void PIDLaserTimerCallback(void *argument)
+{
+  AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
+
+  hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance;
+  hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance;
+
+  PID_laser_realize(hawhl->hpid_las_x);
+  PID_laser_realize(hawhl->hpid_las_y);
+
+  hawhl->speed_components.laser_x = hawhl->hpid_las_x->velocity;
+  hawhl->speed_components.laser_y = hawhl->hpid_las_y->velocity;
 }
 
 void PIDWheelTimerCallback(void *argument)
@@ -221,10 +281,13 @@ void EncoderTimerCallback(void *argument)
 void SpeedCompositionTimerCallback(void *argument)
 {
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
-  all_wheels_set_speed(
-      hawhl, hawhl->speed_components.main_x + hawhl->speed_components.offset_x,
-      hawhl->speed_components.main_y + hawhl->speed_components.offset_y,
-      hawhl->speed_components.gyro_yaw);
+  SpeedComponents *components = &hawhl->speed_components;
+  all_wheels_set_speed(hawhl,
+                       components->main_x + components->offset_x +
+                           (components->laser_x_en ? components->laser_x : 0),
+                       components->main_y + components->offset_y +
+                           (components->laser_y_en ? components->laser_y : 0),
+                       components->gyro_yaw);
 }
 
 void PWMSetTimerCallback(void *argument)

@@ -4,7 +4,8 @@
 #include "tim.h"
 
 /** 轮速闭环 PID */
-void PID_wheel_init(PIDWheel_HandleTypeDef *pid) {
+void PID_wheel_init(PIDWheel_HandleTypeDef *pid)
+{
   pid->SetSpeed = 0.0;
   pid->AltualSpeed = 0.0;
   pid->error = 0.0;
@@ -26,7 +27,8 @@ void PID_wheel_init(PIDWheel_HandleTypeDef *pid) {
  *
  * @param pid PIDWheel handle
  */
-void PID_wheel_realize(PIDWheel_HandleTypeDef *pid) {
+void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
+{
   int index;
   // 计算误差
   pid->error = pid->SetSpeed - pid->AltualSpeed;
@@ -83,7 +85,8 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid) {
   pid->erro_last = pid->error;
 }
 
-void PID_yaw_init(PIDYaw_HandleTypeDef *pid) {
+void PID_yaw_init(PIDYaw_HandleTypeDef *pid)
+{
   pid->SetDeg = 0.0;
   pid->AltualDeg = 0.0;
   pid->error = 0.0;
@@ -100,7 +103,8 @@ void PID_yaw_init(PIDYaw_HandleTypeDef *pid) {
   pid->imin = -0.1;
 }
 
-void PID_yaw_realize(PIDYaw_HandleTypeDef *pid) {
+void PID_yaw_realize(PIDYaw_HandleTypeDef *pid)
+{
   int index;
   pid->error = pid->SetDeg - pid->AltualDeg;
 
@@ -145,7 +149,8 @@ void PID_yaw_realize(PIDYaw_HandleTypeDef *pid) {
   pid->erro_last = pid->error;
 }
 
-void PID_laser_init(PIDLaser_HandleTypeDef *pid) {
+void PID_laser_init(PIDLaser_HandleTypeDef *pid)
+{
   pid->SetDistance = 0.0;
   pid->AltualDistance = 0.0;
   pid->error = 0.0;
@@ -162,7 +167,8 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid) {
   pid->imin = -10;
 }
 
-void PID_laser_realize(PIDLaser_HandleTypeDef *pid) {
+void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
+{
   int index;
   pid->error = pid->SetDistance - pid->AltualDistance;
 
