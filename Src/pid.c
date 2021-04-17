@@ -154,28 +154,28 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
   pid->SetDistance = 0.0;
   pid->AltualDistance = 0.0;
   pid->error = 0.0;
-  pid->erromax = 20.0;
+  pid->erromax = 5.0;
   pid->erro_last = 0.0;
   pid->velocity = 0.0;
   pid->integral = 0.0;
-  pid->Kp = 1;
-  pid->Ki = 0.2;
+  pid->Kp = 2;
+  pid->Ki = 1;
   pid->Kd = 0.5;
   pid->max = 60.0;
   pid->min = -60.0;
   pid->imax = 10;
   pid->imin = -10;
+  pid->dead_zone = 0.3;
 }
 
 void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
 {
   int index;
-//  pid->error = pid->SetDistance - pid->AltualDistance;
+  //  pid->error = pid->SetDistance - pid->AltualDistance;
   pid->error = pid->AltualDistance - pid->SetDistance;
 
   if (pid->velocity >= pid->max) {
-    if (fabs(pid->error) > pid->erromax)
-    {
+    if (fabs(pid->error) > pid->erromax) {
       index = 0;
     } else {
       index = 1;
@@ -202,7 +202,7 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
     }
   }
   index = 0;
-  if (fabs(pid->error) < 0.5) pid->integral = 0;
+  if (fabs(pid->error) < pid->dead_zone) pid->integral = 0;
   float integral = pid->Ki * pid->integral;
   if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;
   if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
@@ -210,6 +210,6 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
                   pid->Kd * (pid->error - pid->erro_last);
   if (pid->velocity > pid->max) pid->velocity = pid->max;
   if (pid->velocity < pid->min) pid->velocity = pid->min;
-  if (fabs(pid->error) < 0.2) pid->velocity = 0.0;
+  if (fabs(pid->error) < pid->dead_zone) pid->velocity = 0.0;
   pid->erro_last = pid->error;
 }

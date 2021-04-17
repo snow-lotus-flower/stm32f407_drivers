@@ -58,6 +58,7 @@ typedef struct {
   float min;             // 输出允许的最小速度, cm/s
   float imax;            // 积分项最大值, cm/s
   float imin;            // 积分项最小值, cm/s
+  float dead_zone;
 } PIDLaser_HandleTypeDef;
 
 void PID_wheel_init(PIDWheel_HandleTypeDef *pid);

@@ -56,7 +56,7 @@ void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl)
 void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl)
 {
   gyro_start(hawhl->hgyro);
-  osDelay(100);
+  osDelay(500);
   gyro_set_logic_zero(hawhl->hgyro);
 
   PID_yaw_init(hawhl->hpid_yaw);
@@ -227,10 +227,52 @@ void PIDYawTimerCallback(void *argument)
 
 void PIDLaserTimerCallback(void *argument)
 {
+  static int16_t xlastFL, xlastFR, xlastRL, xlastRR;
+  static int16_t ylastFL, ylastFR, ylastRL, ylastRR;
+  float deltaFL, deltaFR, deltaRL, deltaRR;
+  float deltax, deltay;
+
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
 
-  hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance;
-  hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance;
+  if (hawhl->hlas_x->new_data) {
+    hawhl->hlas_x->new_data = false;
+    hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance;
+    xlastFL = hawhl->FL->henc->cur_counter;
+    xlastFR = hawhl->FR->henc->cur_counter;
+    xlastRL = hawhl->RL->henc->cur_counter;
+    xlastRR = hawhl->RR->henc->cur_counter;
+  } else {
+    deltaFL =
+        counter_to_real_dis(hawhl, hawhl->FL->henc->cur_counter - xlastFL);
+    deltaFR =
+        counter_to_real_dis(hawhl, hawhl->FR->henc->cur_counter - xlastFR);
+    deltaRL =
+        counter_to_real_dis(hawhl, hawhl->RL->henc->cur_counter - xlastRL);
+    deltaRR =
+        counter_to_real_dis(hawhl, hawhl->RR->henc->cur_counter - xlastRR);
+    deltax = (deltaFL + deltaFR + deltaRL + deltaRR) / 4;
+    hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance - deltax;
+  }
+
+  if (hawhl->hlas_y->new_data) {
+    hawhl->hlas_y->new_data = false;
+    hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance;
+    ylastFL = hawhl->FL->henc->cur_counter;
+    ylastFR = hawhl->FR->henc->cur_counter;
+    ylastRL = hawhl->RL->henc->cur_counter;
+    ylastRR = hawhl->RR->henc->cur_counter;
+  } else {
+    deltaFL =
+        counter_to_real_dis(hawhl, hawhl->FL->henc->cur_counter - ylastFL);
+    deltaFR =
+        counter_to_real_dis(hawhl, hawhl->FR->henc->cur_counter - ylastFR);
+    deltaRL =
+        counter_to_real_dis(hawhl, hawhl->RL->henc->cur_counter - ylastRL);
+    deltaRR =
+        counter_to_real_dis(hawhl, hawhl->RR->henc->cur_counter - ylastRR);
+    deltay = (-deltaFL + deltaFR + deltaRL - deltaRR) / 4;
+    hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance - deltay;
+  }
 
   PID_laser_realize(hawhl->hpid_las_x);
   PID_laser_realize(hawhl->hpid_las_y);
