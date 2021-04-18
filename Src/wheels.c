@@ -220,7 +220,7 @@ void PIDYawTimerCallback(void *argument)
 {
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
 
-  hawhl->hpid_yaw->AltualDeg = hawhl->hgyro->logic_degree;
+  hawhl->hpid_yaw->ActualDeg = hawhl->hgyro->logic_degree;
   PID_yaw_realize(hawhl->hpid_yaw);
   hawhl->speed_components.gyro_yaw = hawhl->hpid_yaw->omega;
 }
@@ -236,7 +236,7 @@ void PIDLaserTimerCallback(void *argument)
 
   if (hawhl->hlas_x->new_data) {
     hawhl->hlas_x->new_data = false;
-    hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance;
+    hawhl->hpid_las_x->ActualDistance = hawhl->hlas_x->distance;
     xlastFL = hawhl->FL->henc->cur_counter;
     xlastFR = hawhl->FR->henc->cur_counter;
     xlastRL = hawhl->RL->henc->cur_counter;
@@ -251,12 +251,12 @@ void PIDLaserTimerCallback(void *argument)
     deltaRR =
         counter_to_real_dis(hawhl, hawhl->RR->henc->cur_counter - xlastRR);
     deltax = (deltaFL + deltaFR + deltaRL + deltaRR) / 4;
-    hawhl->hpid_las_x->AltualDistance = hawhl->hlas_x->distance - deltax;
+    hawhl->hpid_las_x->ActualDistance = hawhl->hlas_x->distance - deltax;
   }
 
   if (hawhl->hlas_y->new_data) {
     hawhl->hlas_y->new_data = false;
-    hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance;
+    hawhl->hpid_las_y->ActualDistance = hawhl->hlas_y->distance;
     ylastFL = hawhl->FL->henc->cur_counter;
     ylastFR = hawhl->FR->henc->cur_counter;
     ylastRL = hawhl->RL->henc->cur_counter;
@@ -271,7 +271,7 @@ void PIDLaserTimerCallback(void *argument)
     deltaRR =
         counter_to_real_dis(hawhl, hawhl->RR->henc->cur_counter - ylastRR);
     deltay = (-deltaFL + deltaFR + deltaRL - deltaRR) / 4;
-    hawhl->hpid_las_y->AltualDistance = hawhl->hlas_y->distance - deltay;
+    hawhl->hpid_las_y->ActualDistance = hawhl->hlas_y->distance - deltay;
   }
 
   PID_laser_realize(hawhl->hpid_las_x);
@@ -285,10 +285,10 @@ void PIDWheelTimerCallback(void *argument)
 {
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
 
-  hawhl->FL->hpid->AltualSpeed = hawhl->FL->real_speed;
-  hawhl->FR->hpid->AltualSpeed = hawhl->FR->real_speed;
-  hawhl->RL->hpid->AltualSpeed = hawhl->RL->real_speed;
-  hawhl->RR->hpid->AltualSpeed = hawhl->RR->real_speed;
+  hawhl->FL->hpid->ActualSpeed = hawhl->FL->real_speed;
+  hawhl->FR->hpid->ActualSpeed = hawhl->FR->real_speed;
+  hawhl->RL->hpid->ActualSpeed = hawhl->RL->real_speed;
+  hawhl->RR->hpid->ActualSpeed = hawhl->RR->real_speed;
 
   PID_wheel_realize(hawhl->FL->hpid);
   PID_wheel_realize(hawhl->FR->hpid);

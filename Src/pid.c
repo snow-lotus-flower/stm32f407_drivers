@@ -7,7 +7,7 @@
 void PID_wheel_init(PIDWheel_HandleTypeDef *pid)
 {
   pid->SetSpeed = 0.0;
-  pid->AltualSpeed = 0.0;
+  pid->ActualSpeed = 0.0;
   pid->error = 0.0;
   pid->erromax = 20.0;
   pid->erro_last = 0.0;
@@ -31,7 +31,7 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
 {
   int index;
   // 计算误差
-  pid->error = pid->SetSpeed - pid->AltualSpeed;
+  pid->error = pid->SetSpeed - pid->ActualSpeed;
 
   /* 抗积分饱和
     1. 判断输出值是否达到极值. 若是, 则不再增加此方向的积分;
@@ -69,7 +69,7 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
   // 计算加比例后的积分项
   float integral = pid->Ki * pid->integral;
   // 如果想让轮子停下, 且实际速度已经为0, 则对积分项清零
-  if (pid->SetSpeed == 0.0 && pid->AltualSpeed == 0) pid->integral = 0;
+  if (pid->SetSpeed == 0.0 && pid->ActualSpeed == 0) pid->integral = 0;
   // 如果积分项很大, 超过了规定的阈值, 则限制在阈值内
   if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;
   if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
@@ -79,8 +79,8 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
                  pid->Kd * (pid->error - pid->erro_last);
 
   // 限制执行器的输出阈值
-  if (pid->voltage > 0.6) pid->voltage = 0.6;
-  if (pid->voltage < -0.6) pid->voltage = -0.6;
+  if (pid->voltage > 0.8) pid->voltage = 0.8;
+  if (pid->voltage < -0.8) pid->voltage = -0.8;
 
   pid->erro_last = pid->error;
 }
@@ -88,7 +88,7 @@ void PID_wheel_realize(PIDWheel_HandleTypeDef *pid)
 void PID_yaw_init(PIDYaw_HandleTypeDef *pid)
 {
   pid->SetDeg = 0.0;
-  pid->AltualDeg = 0.0;
+  pid->ActualDeg = 0.0;
   pid->error = 0.0;
   pid->erromax = 20.0;
   pid->erro_last = 0.0;
@@ -106,7 +106,7 @@ void PID_yaw_init(PIDYaw_HandleTypeDef *pid)
 void PID_yaw_realize(PIDYaw_HandleTypeDef *pid)
 {
   int index;
-  pid->error = pid->SetDeg - pid->AltualDeg;
+  pid->error = pid->SetDeg - pid->ActualDeg;
 
   if (pid->omega >= pid->max) {
     if (fabs(pid->error) > pid->erromax)  //�ǵ���ǰ����� #include "stdlib.h"
@@ -152,7 +152,7 @@ void PID_yaw_realize(PIDYaw_HandleTypeDef *pid)
 void PID_laser_init(PIDLaser_HandleTypeDef *pid)
 {
   pid->SetDistance = 0.0;
-  pid->AltualDistance = 0.0;
+  pid->ActualDistance = 0.0;
   pid->error = 0.0;
   pid->erromax = 5.0;
   pid->erro_last = 0.0;
@@ -161,8 +161,8 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
   pid->Kp = 2;
   pid->Ki = 1;
   pid->Kd = 0.5;
-  pid->max = 60.0;
-  pid->min = -60.0;
+  pid->max = 100.0;
+  pid->min = -100.0;
   pid->imax = 10;
   pid->imin = -10;
   pid->dead_zone = 0.3;
@@ -171,8 +171,8 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
 void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
 {
   int index;
-  //  pid->error = pid->SetDistance - pid->AltualDistance;
-  pid->error = pid->AltualDistance - pid->SetDistance;
+  //  pid->error = pid->SetDistance - pid->ActualDistance;
+  pid->error = pid->ActualDistance - pid->SetDistance;
 
   if (pid->velocity >= pid->max) {
     if (fabs(pid->error) > pid->erromax) {

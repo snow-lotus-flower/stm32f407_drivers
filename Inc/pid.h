@@ -9,7 +9,7 @@
  */
 typedef struct {
   float SetSpeed;     // 目标速度, cm/s
-  float AltualSpeed;  // 当前实际速度, cm/s
+  float ActualSpeed;  // 当前实际速度, cm/s
   float error;        // 速度误差, SetSpeed - ActualSpeed
   float erromax;      // 积分分离后, 开始进行积分的阈值
   float erro_last;    // 上一次的速度误差
@@ -28,8 +28,8 @@ typedef struct {
  */
 typedef struct {
   float SetDeg;      // 目标角度值, deg
-  float AltualDeg;   // 当前实际角度, deg
-  float error;       // 角度误差, SetDeg - AltualDeg
+  float ActualDeg;   // 当前实际角度, deg
+  float error;       // 角度误差, SetDeg - ActualDeg
   float erromax;     // 积分分离后, 开始进行积分的阈值
   float erro_last;   // 上一次的角度误差
   float Kp, Ki, Kd;  // 比例、积分、微分系数
@@ -47,8 +47,8 @@ typedef struct {
  */
 typedef struct {
   float SetDistance;     // 目标距离值, cm
-  float AltualDistance;  // 当前实际距离, cm
-  float error;           // 距离误差, SetDistance - AltualDistance
+  float ActualDistance;  // 当前实际距离, cm
+  float error;           // 距离误差, SetDistance - ActualDistance
   float erromax;         // 积分分离后, 开始进行积分的阈值
   float erro_last;       // 上一次的距离误差
   float Kp, Ki, Kd;      // 比例、积分、微分系数
