@@ -58,10 +58,12 @@ typedef struct {
   Laser_HandleTypeDef *hlas_x;
   Laser_HandleTypeDef *hlas_y;
 
-  Servo_HandleTypeDef *hsrv_waist;
-  Servo_HandleTypeDef *hsrv_shoulder;
-  Servo_HandleTypeDef *hsrv_elbow;
-  Servo_HandleTypeDef *hsrv_hand;
+  Servo_HandleTypeDef *hsrv_yaw;
+  Servo_HandleTypeDef *hsrv_arm1;
+  Servo_HandleTypeDef *hsrv_arm2;
+  Servo_HandleTypeDef *hsrv_arm3;
+  Servo_HandleTypeDef *hsrv_paw;
+  Servo_HandleTypeDef *hsrv_plate;
 
   SpeedComponents speed_components;
 
@@ -95,9 +97,10 @@ typedef struct {
 float counter_to_real_dis(AllWheels_HandleTypeDef *hawhl, int16_t counter);
 void all_wheels_set_speed(AllWheels_HandleTypeDef *hawhl, float x, float y,
                           float yaw);
-void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl);
+// void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_start_encoder(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_start_pid_wheel(AllWheels_HandleTypeDef *hawhl);
+void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_start_speed_composition(AllWheels_HandleTypeDef *hawhl);
 void all_wheels_set_main_speed(AllWheels_HandleTypeDef *hawhl, float x,
                                float y);

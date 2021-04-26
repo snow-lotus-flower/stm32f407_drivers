@@ -44,19 +44,17 @@ void all_wheels_start_pid_wheel(AllWheels_HandleTypeDef *hawhl)
   osTimerStart(hawhl->htim_pid_wheel, hawhl->tim_ticks_pid_wheel);
 }
 
-void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl)
-{
-  if (hawhl->htim_pwm == NULL) {
-    hawhl->htim_pwm = osTimerNew(PWMSetTimerCallback, osTimerPeriodic, hawhl,
-                                 &(osTimerAttr_t){.name = "PWMSetTimer"});
-  }
-  osTimerStart(hawhl->htim_pwm, hawhl->tim_ticks_pwm);
-}
+// void all_wheels_start_pwm_output(AllWheels_HandleTypeDef *hawhl)
+// {
+//   if (hawhl->htim_pwm == NULL) {
+//     hawhl->htim_pwm = osTimerNew(PWMSetTimerCallback, osTimerPeriodic, hawhl,
+//                                  &(osTimerAttr_t){.name = "PWMSetTimer"});
+//   }
+//   osTimerStart(hawhl->htim_pwm, hawhl->tim_ticks_pwm);
+// }
 
 void all_wheels_start_pid_yaw(AllWheels_HandleTypeDef *hawhl)
 {
-  gyro_start(hawhl->hgyro);
-  osDelay(500);
   gyro_set_logic_zero(hawhl->hgyro);
 
   PID_yaw_init(hawhl->hpid_yaw);
@@ -336,7 +334,8 @@ void PWMSetTimerCallback(void *argument)
 {
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
   static float last_FL, last_FR, last_RL, last_RR;
-  static uint16_t last_waist, last_shoulder, last_elbow, last_hand;
+  static uint16_t last_yaw, last_arm1, last_arm2, last_arm3, last_paw,
+      last_plate;
 
   if (last_FL != hawhl->FL->hmtr->speed) {
     last_FL = hawhl->FL->hmtr->speed;
@@ -355,20 +354,28 @@ void PWMSetTimerCallback(void *argument)
     motor_speed_update(hawhl->RR->hmtr);
   }
 
-  if (last_waist != hawhl->hsrv_waist->pos) {
-    last_waist = hawhl->hsrv_waist->pos;
-    servo_position_update(hawhl->hsrv_waist);
+  if (last_yaw != hawhl->hsrv_yaw->pos) {
+    last_yaw = hawhl->hsrv_yaw->pos;
+    servo_position_update(hawhl->hsrv_yaw);
   }
-  if (last_shoulder != hawhl->hsrv_shoulder->pos) {
-    last_shoulder = hawhl->hsrv_shoulder->pos;
-    servo_position_update(hawhl->hsrv_shoulder);
+  if (last_arm1 != hawhl->hsrv_arm1->pos) {
+    last_arm1 = hawhl->hsrv_arm1->pos;
+    servo_position_update(hawhl->hsrv_arm1);
   }
-  if (last_elbow != hawhl->hsrv_elbow->pos) {
-    last_elbow = hawhl->hsrv_elbow->pos;
-    servo_position_update(hawhl->hsrv_elbow);
+  if (last_arm2 != hawhl->hsrv_arm2->pos) {
+    last_arm2 = hawhl->hsrv_arm2->pos;
+    servo_position_update(hawhl->hsrv_arm2);
   }
-  if (last_hand != hawhl->hsrv_hand->pos) {
-    last_hand = hawhl->hsrv_hand->pos;
-    servo_position_update(hawhl->hsrv_hand);
+  if (last_arm3 != hawhl->hsrv_arm3->pos) {
+    last_arm3 = hawhl->hsrv_arm3->pos;
+    servo_position_update(hawhl->hsrv_arm3);
+  }
+  if (last_paw != hawhl->hsrv_paw->pos) {
+    last_paw = hawhl->hsrv_paw->pos;
+    servo_position_update(hawhl->hsrv_paw);
+  }
+  if (last_plate != hawhl->hsrv_plate->pos) {
+    last_plate = hawhl->hsrv_plate->pos;
+    servo_position_update(hawhl->hsrv_plate);
   }
 }
