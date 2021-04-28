@@ -18,8 +18,8 @@ void PID_wheel_init(PIDWheel_HandleTypeDef *pid)
   pid->Kd = 0.01;
   pid->umax = 0.2;
   pid->umin = -0.2;
-  pid->imax = 0.2;
-  pid->imin = -0.2;
+  pid->imax = 0.3;
+  pid->imin = -0.3;
 }
 
 /**
@@ -154,18 +154,20 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
   pid->SetDistance = 0.0;
   pid->ActualDistance = 0.0;
   pid->error = 0.0;
-  pid->erromax = 5.0;
+  pid->erromax = 20.0;
   pid->erro_last = 0.0;
   pid->velocity = 0.0;
   pid->integral = 0.0;
   pid->Kp = 2;
-  pid->Ki = 1;
-  pid->Kd = 0.5;
+  pid->Ki = 0.1;
+  pid->Kd = 5;
   pid->max = 100.0;
   pid->min = -100.0;
-  pid->imax = 10;
-  pid->imin = -10;
-  pid->dead_zone = 0.3;
+  pid->imax = 1;
+  pid->imin = -1;
+  pid->dead_zone_small = 0.3;
+  pid->dead_zone_big = 0.4;
+  pid->dead = false;
 }
 
 void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
@@ -180,6 +182,9 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
     } else {
       index = 1;
       if (pid->error < 0) {
+        if (pid->integral > 0) {
+          pid->integral = 0;
+        }
         pid->integral += pid->error;
       }
     }
@@ -190,6 +195,9 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
     } else {
       index = 1;
       if (pid->error > 0) {
+        if (pid->integral < 0) {
+          pid->integral = 0;
+        }
         pid->integral += pid->error;
       }
     }
@@ -201,8 +209,7 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
       pid->integral += pid->error;
     }
   }
-  index = 0;
-  if (fabs(pid->error) < pid->dead_zone) pid->integral = 0;
+  if (fabs(pid->error) < pid->dead_zone_small) pid->integral = 0;
   float integral = pid->Ki * pid->integral;
   if (integral > pid->imax) pid->integral = pid->imax / pid->Ki;
   if (integral < pid->imin) pid->integral = pid->imin / pid->Ki;
@@ -210,6 +217,8 @@ void PID_laser_realize(PIDLaser_HandleTypeDef *pid)
                   pid->Kd * (pid->error - pid->erro_last);
   if (pid->velocity > pid->max) pid->velocity = pid->max;
   if (pid->velocity < pid->min) pid->velocity = pid->min;
-  if (fabs(pid->error) < pid->dead_zone) pid->velocity = 0.0;
+  if (fabs(pid->error) < pid->dead_zone_small) pid->dead = true;
+  if (pid->dead && fabs(pid->error) > pid->dead_zone_big) pid->dead = false;
+  if (pid->dead) pid->velocity = 0.0;
   pid->erro_last = pid->error;
 }

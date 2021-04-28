@@ -112,5 +112,8 @@ void set_laser_x_enable(AllWheels_HandleTypeDef *hawhl, bool en);
 void set_laser_y_enable(AllWheels_HandleTypeDef *hawhl, bool en);
 void laser_goto_x(AllWheels_HandleTypeDef *hawhl, float dis);
 void laser_goto_y(AllWheels_HandleTypeDef *hawhl, float dis);
-
+void laser_goto_xy(AllWheels_HandleTypeDef *hawhl, float x_dis, float y_dis);
+void laser_disable_x(AllWheels_HandleTypeDef *hawhl);
+void laser_disable_y(AllWheels_HandleTypeDef *hawhl);
+void laser_disable_xy(AllWheels_HandleTypeDef *hawhl);
 #endif  // !__WHEELS_H__

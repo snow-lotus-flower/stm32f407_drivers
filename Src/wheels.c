@@ -115,6 +115,28 @@ void laser_goto_y(AllWheels_HandleTypeDef *hawhl, float dis)
   hawhl->hpid_las_y->SetDistance = dis;
 }
 
+void laser_goto_xy(AllWheels_HandleTypeDef *hawhl, float x_dis, float y_dis)
+{
+  laser_goto_x(hawhl, x_dis);
+  laser_goto_y(hawhl, y_dis);
+}
+
+void laser_disable_x(AllWheels_HandleTypeDef *hawhl)
+{
+  hawhl->speed_components.laser_x_en = false;
+}
+
+void laser_disable_y(AllWheels_HandleTypeDef *hawhl)
+{
+  hawhl->speed_components.laser_y_en = false;
+}
+
+void laser_disable_xy(AllWheels_HandleTypeDef *hawhl)
+{
+  laser_disable_x(hawhl);
+  laser_disable_y(hawhl);
+}
+
 void all_wheels_set_speed(AllWheels_HandleTypeDef *hawhl, float x, float y,
                           float yaw)
 {
