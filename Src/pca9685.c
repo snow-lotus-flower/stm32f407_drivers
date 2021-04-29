@@ -78,9 +78,13 @@ static bool pca9685_write_data(PCA9685_HandleTypeDef *handle, uint8_t address,
 
   memcpy(&transfer[1], data, length);
 
-  return HAL_I2C_Master_Transmit(handle->i2c_handle, handle->device_address,
-                                 transfer, length + 1,
-                                 PCA9685_I2C_TIMEOUT) == HAL_OK;
+  taskENTER_CRITICAL();
+  HAL_StatusTypeDef result =
+      HAL_I2C_Master_Transmit(handle->i2c_handle, handle->device_address,
+                              transfer, length + 1,
+                              PCA9685_I2C_TIMEOUT) == HAL_OK;
+  taskEXIT_CRITICAL();
+  return result;
 }
 
 static bool pca9685_read_u8(PCA9685_HandleTypeDef *handle, uint8_t address,
@@ -210,8 +214,9 @@ bool pca9685_set_pwm_frequency(PCA9685_HandleTypeDef *handle, float frequency)
   return success;
 }
 
-bool pca9685_set_channel_pwm_times(PCA9685_HandleTypeDef *handle, unsigned channel,
-                                   unsigned on_time, unsigned off_time)
+bool pca9685_set_channel_pwm_times(PCA9685_HandleTypeDef *handle,
+                                   unsigned channel, unsigned on_time,
+                                   unsigned off_time)
 {
   assert(channel >= 0);
   assert(channel < 16);
@@ -227,8 +232,9 @@ bool pca9685_set_channel_pwm_times(PCA9685_HandleTypeDef *handle, unsigned chann
                             data, 4);
 }
 
-bool pca9685_set_channel_duty_cycle(PCA9685_HandleTypeDef *handle, unsigned channel,
-                                    float duty_cycle, bool logarithmic)
+bool pca9685_set_channel_duty_cycle(PCA9685_HandleTypeDef *handle,
+                                    unsigned channel, float duty_cycle,
+                                    bool logarithmic)
 {
   assert(duty_cycle >= 0.0);
   assert(duty_cycle <= 1.0);
