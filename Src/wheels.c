@@ -327,8 +327,11 @@ void PIDWheelTimerCallback(void *argument)
   PWMSetTimerCallback(hawhl);
 }
 
+uint32_t delta_ticks, last_ticks;
 void EncoderTimerCallback(void *argument)
 {
+  delta_ticks = osKernelGetTickCount() - last_ticks;
+  last_ticks = delta_ticks + last_ticks;
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
   encoder_update(hawhl->FL->henc);
   encoder_update(hawhl->FR->henc);
@@ -356,7 +359,7 @@ void PWMSetTimerCallback(void *argument)
 {
   AllWheels_HandleTypeDef *hawhl = (AllWheels_HandleTypeDef *)argument;
   static float last_FL, last_FR, last_RL, last_RR;
-  static uint16_t last_yaw, last_arm1, last_arm2, last_arm3, last_paw,
+  static int16_t last_yaw, last_arm1, last_arm2, last_arm3, last_paw,
       last_plate;
 
   if (last_FL != hawhl->FL->hmtr->speed) {
