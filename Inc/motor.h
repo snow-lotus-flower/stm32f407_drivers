@@ -24,6 +24,8 @@ typedef struct {
   GPIO_TypeDef *dir1_port; /** 电机旋转防向 GPIO 引脚 */
   GPIO_TypeDef *dir2_port; /** 电机旋转防向 GPIO 引脚 */
   PWM_HandleTypeDef *hpwm; /** 电机 PWM handle */
+  TIM_HandleTypeDef *htim; /** PWM 定时器 handle */
+  uint32_t tim_ch;         /** PWM 定时器 channel */
   uint16_t dir1_pin;       /** 电机旋转防向 GPIO 引脚 */
   uint16_t dir2_pin;       /** 电机旋转防向 GPIO 引脚 */
   float speed;             /** 电机输出的占空比, [0, 1] */

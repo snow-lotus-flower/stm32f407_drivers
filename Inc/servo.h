@@ -7,6 +7,8 @@
 
 typedef struct {
   PWM_HandleTypeDef *hpwm;
+  TIM_HandleTypeDef *htim;
+  uint32_t tim_ch;
   __IO int16_t pos;
   __IO uint16_t base;
 } Servo_HandleTypeDef;

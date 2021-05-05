@@ -33,6 +33,12 @@ static void motor_set_direction(Motor_HandleTypeDef *hmtr, MotorDirection dir)
   HAL_GPIO_WritePin(hmtr->dir2_port, hmtr->dir2_pin, dir2_state);
 }
 
+static void motor_set_duty_cycle(Motor_HandleTypeDef *hmtr, float duty)
+{
+  __HAL_TIM_SetCompare(hmtr->htim, hmtr->tim_ch,
+                       (uint32_t)(hmtr->htim->Instance->ARR * duty));
+}
+
 /**
  * @brief 更新电机速度, 使新的电机速度生效
  *
@@ -42,17 +48,17 @@ void motor_speed_update(Motor_HandleTypeDef *hmtr)
 {
   if (hmtr->brake) {
     motor_set_direction(hmtr, MOTOR_BRAKE);
-    pwm_set_duty_cycle(hmtr->hpwm, 1.0);
+    motor_set_duty_cycle(hmtr, 1.0);
   } else {
     if (hmtr->speed == 0) {
       motor_set_direction(hmtr, MOTOR_STOP);
-      pwm_set_duty_cycle(hmtr->hpwm, 0.0);
+      motor_set_duty_cycle(hmtr, 0.0);
     } else if (hmtr->speed > 0) {
       motor_set_direction(hmtr, MOTOR_FORWARD);
-      pwm_set_duty_cycle(hmtr->hpwm, hmtr->speed);
+      motor_set_duty_cycle(hmtr, hmtr->speed);
     } else {  // hmtr->speed < 0
       motor_set_direction(hmtr, MOTOR_BACKWARD);
-      pwm_set_duty_cycle(hmtr->hpwm, -hmtr->speed);
+      motor_set_duty_cycle(hmtr, -hmtr->speed);
     }
   }
 }
