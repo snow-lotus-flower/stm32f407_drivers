@@ -5,6 +5,15 @@
 
 #include "math.h"
 
+extern const float take_pid_deadzone_small;
+extern const float take_pid_deadzone_big;
+
+extern const float put_pid_deadzone_small;
+extern const float put_pid_deadzone_big;
+
+extern float pid_deadzone_small;
+extern float pid_deadzone_big;
+
 /**
  * @brief 轮速闭环 PID
  *

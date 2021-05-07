@@ -3,6 +3,15 @@
 #include "stdlib.h"
 #include "tim.h"
 
+const float take_pid_deadzone_small = 0.7;
+const float take_pid_deadzone_big = 1.0;
+
+const float put_pid_deadzone_small = 0.3;
+const float put_pid_deadzone_big = 0.5;
+
+float pid_deadzone_small = put_pid_deadzone_small;
+float pid_deadzone_big = put_pid_deadzone_big;
+
 /** 轮速闭环 PID */
 void PID_wheel_init(PIDWheel_HandleTypeDef *pid)
 {
@@ -165,8 +174,8 @@ void PID_laser_init(PIDLaser_HandleTypeDef *pid)
   pid->min = -100.0;
   pid->imax = 1;
   pid->imin = -1;
-  pid->dead_zone_small = 0.3;
-  pid->dead_zone_big = 0.4;
+  pid->dead_zone_small = pid_deadzone_small;
+  pid->dead_zone_big = pid_deadzone_big;
   pid->dead = false;
 }
 
